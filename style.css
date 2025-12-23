@@ -1,0 +1,380 @@
+/* ---------------------------------------------------
+   GLOBAL DARK THEME (GREEN + BLUE + BLACK)
+--------------------------------------------------- */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #000000, #001f1f);
+  color: #e0fff7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.site-logo {
+  width: 180px;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+/* ---------------------------------------------------
+   HEADER + NAV
+--------------------------------------------------- */
+header {
+  background: rgba(0, 50, 30, 0.5);
+  padding: 25px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 150, 0.3);
+}
+
+nav {
+  background: rgba(0, 50, 30, 0.5);
+  display: flex;
+  justify-content: center;   /* centers nav links */
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 12px 25px;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0,255,150,0.3);
+}
+
+nav a {
+  color: #c0fff0;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 15px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+nav a:hover, nav a.active {
+  background: rgba(0, 255, 150, 0.2);
+  transform: translateY(-2px);
+  color: #00ffa0;
+}
+
+/* ---------------------------------------------------
+   MAIN PAGE CONTAINER
+--------------------------------------------------- */
+.container {
+  padding: 25px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.section {
+  background: #0a2c2c;
+  border-radius: 20px;
+  padding: 25px;
+  color: #00ffa0;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0,255,150,0.3);
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.section:hover {
+  transform: translateY(-3px);
+}
+
+h2 {
+  margin-top: 0;
+  color: #00ffc0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+h3 {
+  margin-top: 0;
+  color: #00ffc0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* ---------------------------------------------------
+   CARDS
+--------------------------------------------------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card-grid .card:nth-child(4) {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card, .reward-card, .bin-status-card {
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(0,50,30,0.5);
+  box-shadow: 0 6px 20px rgba(0,255,150,0.4);
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover, .reward-card:hover, .bin-status-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,255,150,0.7);
+}
+
+.card-icon, .reward-icon, .bin-img {
+  display: block;
+  margin: auto;
+}
+
+.card-icon { width: 50px; height: 50px; }
+.reward-icon { width: 60px; height: 60px; margin-bottom: 10px; }
+.bin-img { width: 140px; height: 140px; margin-bottom: 12px; }
+
+/* Info Images */
+.info-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,255,150,0.4);
+}
+
+/* ---------------------------------------------------
+   BIN FLOAT ANIMATION
+--------------------------------------------------- */
+@keyframes floatBin {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+.bin-img { animation: floatBin 2.8s ease-in-out infinite; }
+
+/* ---------------------------------------------------
+   BUTTONS
+--------------------------------------------------- */
+button, .bin-btn {
+  display: inline-block;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #00ffa0, #00d4ff);
+  color: #000;
+  font-weight: 700;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: 0.25s;
+  box-shadow: 0 0 15px #00ffa070;
+  cursor: pointer;
+}
+
+button:hover, .bin-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px #00ffa0;
+}
+
+/* ---------------------------------------------------
+   PROGRESS BARS
+--------------------------------------------------- */
+.progress-bar {
+  width: 100%;
+  height: 16px;
+  background: rgba(0,255,150,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 10px 0 15px;
+  border: 1px solid rgba(0,255,150,0.3);
+  backdrop-filter: blur(6px);
+}
+
+.progress-fill, .progress {
+  height: 100%;
+  width: 0%;
+  background: #00d4ff;
+  border-radius: 20px;
+  box-shadow: 0 0 10px #00d4ff;
+  transition: width 1.7s cubic-bezier(.25,.46,.45,1);
+}
+
+/* ---------------------------------------------------
+   STATUS COLORS
+--------------------------------------------------- */
+.status-online { color: #00ff90; font-weight: bold; }
+.status-alert  { color: #ff4f4f; font-weight: bold; }
+
+/* ---------------------------------------------------
+   NOTIFICATIONS
+--------------------------------------------------- */
+.notif {
+  position: fixed;
+  right: 20px;
+  bottom: 25px;
+  background: rgba(0,50,30,0.5);
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,255,150,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+  color: #e0fff7;
+  font-weight: 600;
+  transition: 0.5s;
+  opacity: 1;
+}
+
+/* ---------------------------------------------------
+   REWARDS GRID
+--------------------------------------------------- */
+.rewards-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.reward-card {
+  width: 200px;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  background: rgba(0,50,30,0.5);
+  box-shadow: 0 6px 20px rgba(0,255,150,0.4);
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+/* ---------------------------------------------------
+   DASHBOARD
+--------------------------------------------------- */
+.dashboard-container {
+  max-width: 480px;
+  margin: 25px auto;
+  font-family: "Poppins", sans-serif;
+  padding: 0 15px;
+}
+
+/* Top Welcome Card */
+.welcome-card {
+  background: linear-gradient(135deg, #00FFA0, #00D4FF);
+  border-radius: 20px;
+  padding: 25px;
+  color: #001f1f;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0,255,150,0.3);
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.welcome-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Stats Cards */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stats-card {
+  background: #0a2c2c;
+  border-radius: 16px;
+  padding: 20px;
+  color: #e0fff7;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,255,150,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stats-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,255,150,0.3);
+}
+
+/* Buttons */
+.dashboard-btn {
+  width: 100%;
+  padding: 15px 0;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #00FFA0, #00D4FF);
+  color: #001f1f;
+  margin-top: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,255,150,0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,255,150,0.35);
+}
+
+/* Simulation Section */
+.simulate-card {
+  background: #0a2c2c;
+  border-radius: 18px;
+  padding: 20px;
+  color: #e0fff7;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0,255,150,0.2);
+}
+
+.simulate-card input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 10px;
+}
+
+.simulate-card button {
+  margin-top: 15px;
+}
+
+/* Responsive */
+@media screen and (max-width: 480px) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------
+   LEADERBOARD
+--------------------------------------------------- */
+.leaderboard-card {
+ background: linear-gradient(135deg, #00FFA0, #00D4FF);
+  border-radius: 20px;
+  padding: 25px;
+  color: #001f1f;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0,255,150,0.3);
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.leaderboard-card:hover {
+  transform: translateY(-3px);
+}
+
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,255,150,0.2);
+}
+
+.leaderboard-item:last-child { border-bottom: none; }
+
+/* ---------------------------------------------------
+   TEXT & ICONS
+--------------------------------------------------- */
+.fullness-text { font-size: 18px; font-weight: 600; }
+.coin-icon { width: 18px; height: 18px; vertical-align: middle; margin-left: 4px; }
+
+/* ---------------------------------------------------
+   ANIMATIONS
+--------------------------------------------------- */
+@keyframes fadeSlide { from {opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+@keyframes fadeInCard { from{opacity:0; transform:scale(0.94);} to{opacity:1; transform:scale(1);} }

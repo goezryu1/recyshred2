@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RecyShred | Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <img src="logo.png" class="site-logo">
+  <h1>RecyShred</h1>
+  <p>User Dashboard</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="dashboard.html" class="active">Dashboard</a>
+  <a href="binstatus.html">Bin Status</a>
+</nav>
+
+<div class="dashboard-container">
+
+  <!-- Top Card -->
+  <div class="welcome-card">
+    <h2>Welcome, Juan Dela Cruz</h2>
+    <p>Total Coins: 120 RSC | ₱120.00</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-cards">
+    <div class="stats-card">
+      <h3>Total Weight Recycled</h3>
+      <p>12 kg</p>
+    </div>
+    <div class="stats-card">
+      <h3>Last Activity</h3>
+      <p>June 12, 2025</p>
+    </div>
+  </div>  
+
+  <!-- Simulation Section -->
+  <div class="simulate-card">
+    <h3>Simulate Recycling</h3>
+    <label>Enter Weight (kg):</label>
+    <input type="number" id="newWeight" placeholder="e.g. 2.5" />
+    <button class="dashboard-btn" onclick="addRecycle()">Shred & Earn</button>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
