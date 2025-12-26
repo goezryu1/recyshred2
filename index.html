@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RecyShred | Dashboard</title>
+<title>RecyShred | Home</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <img src="logo.png" class="site-logo">
+  <img src="logo.png" class="site-logo" alt="RecyShred Logo">
   <h1>RecyShred</h1>
   <p>Turn Waste into Worth</p>
   <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
 </header>
+
 <nav>
   <a href="index.html" class="active">Home</a>
   <a href="dashboard.html">Dashboard</a>
@@ -22,63 +23,81 @@
 
 <div class="container">
 
-  <!-- HOME -->
-  <section id="home" class="section hero-section">
+  <!-- HERO -->
+  <section class="section hero-section">
     <h2>Welcome to <strong>RecyShred</strong></h2>
-    <p>Our smart Recycling Bin rewards users with coins based on the <strong>weight of recyclable materials</strong>. After shredding, coins are earned and can be redeemed for various rewards.</p>
-    <button class="bin-btn" onclick="window.location.href='dashboard.html'">Go to Dashboard</button>
+    <p>
+      Our smart Recycling Bin rewards users with coins based on the
+      <strong>weight of recyclable materials</strong>.
+    </p>
+    <a href="dashboard.html" class="bin-btn">Go to Dashboard</a>
   </section>
 
+  <!-- HOW IT WORKS -->
   <section class="section">
     <h2>How It Works</h2>
+    <p></p>
+
     <div class="card-grid">
-      <div class="card"><h3>1. Insert Material</h3><p>Insert recyclable paper, cans, or bottles.</p></div>
-      <div class="card"><h3>2. Shred & Measure</h3><p>The system shreds and measures the material.</p></div>
-      <div class="card"><h3>3. Redeem Rewards</h3><p>Check your dashboard and redeem rewards when you have enough coins.</p></div>
+
+      <div class="card hover-gif">
+      <div class="gif-wrap">
+        <img src="insert.png" class="card-gif static" alt="Insert Material">
+        <img src="insert.gif" class="card-gif animated" alt="Insert Material">
+      </div>
+      <h3>Insert Material</h3>
+      <p>Insert recyclable plastic bottles and cans.</p>
+    </div>  
+
+      <div class="card hover-gif">
+      <div class="gif-wrap">
+        <img src="shred.png" class="card-gif static" alt="Insert Material">
+        <img src="shred.gif" class="card-gif animated" alt="Insert Material">
+        </div>
+        <h3>Shred & Measure</h3>
+        <p>The system shreds and measures the material.</p>
+      </div>
+
+      <div class="card hover-gif">
+        <div class="gif-wrap">
+          <img src="redeem.png" class="card-gif static" alt="Redeem Rewards">
+          <img src="redeem.gif" class="card-gif animated" alt="Redeem Rewards">
+        </div>
+        <h3>Redeem Rewards</h3>
+        <p>Check your dashboard to view your balance, and use the machine to collect your money.</p>
+      </div>
+
     </div>
   </section>
 
 </div>
 
 <script>
-// Scroll to section
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+/* =====================================================
+   THEME TOGGLE
+===================================================== */
+const toggleBtn = document.getElementById("theme-toggle");
+
+if (toggleBtn) {
+  toggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+      toggleBtn.textContent = "☀️ Light Mode";
+      localStorage.setItem("theme", "dark");
+    } else {
+      toggleBtn.textContent = "🌙 Dark Mode";
+      localStorage.setItem("theme", "light");
+    }
+  });
 }
 
-// Animate progress bars
-document.querySelectorAll('.progress-fill').forEach(fill => {
-  fill.style.width = fill.getAttribute('data-fill') + '%';
-});
-
-// Theme toggle
-const toggleBtn = document.getElementById("theme-toggle");
-toggleBtn.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
-  localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
-});
 if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark-mode");
   toggleBtn.textContent = "☀️ Light Mode";
 }
-
-// Sticky navbar highlight
-const sections = document.querySelectorAll("section");
-const navLinks = document.querySelectorAll("nav a");
-
-window.addEventListener("scroll", () => {
-  let current = "";
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - 80;
-    if (pageYOffset >= sectionTop) current = section.getAttribute("id");
-  });
-  navLinks.forEach(link => {
-    link.classList.remove("active");
-    if (link.getAttribute("href") === "#" + current) link.classList.add("active");
-  });
-});
 </script>
 
+<script src="script.js"></script>
 </body>
 </html>

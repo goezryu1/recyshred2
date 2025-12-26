@@ -274,12 +274,131 @@ button:hover,
 }
 
 /* ===================================================
+   CARD STYLE
+=================================================== */
+.card.hover-gif {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 25px;
+  border-radius: 20px;
+  background: var(--card-bg);
+  box-shadow: 0 12px 25px var(--card-shadow);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.card.hover-gif:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 35px var(--card-shadow);
+}
+
+.gif-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  height: 140px;
+}
+
+/* PNG is visible by default */
+.card-gif.static {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+/* GIF is hidden by default */
+.card-gif.animated {
+  display: none;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  position: absolute; /* stacked on top of PNG */
+}
+
+/* On hover, hide PNG and show GIF */
+.card.hover-gif:hover .card-gif.static {
+  display: none;
+}
+
+.card.hover-gif:hover .card-gif.animated {
+  display: block;
+}
+.card.hover-gif h3 {
+  margin: 10px 0 5px;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.card.hover-gif p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  max-width: 220px;
+  color: var(--card-text);
+}
+
+/* Optional different sizing for 2nd & 3rd cards */
+.card-grid .card:nth-child(2) .card-gif,
+.card-grid .card:nth-child(3) .card-gif {
+  width: 225px;
+  height: 225px;
+}
+
+/* ===================================================
+   BUTTONS
+=================================================== */
+button,
+.bin-btn,
+.dashboard-btn {
+  display: inline-block;
+  padding: 12px 26px;
+  background: linear-gradient(135deg, #00ffa0, #00d4ff);
+  color: #001f1f;
+  font-weight: 700;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 255, 150, 0.35);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+button:hover,
+.bin-btn:hover,
+.dashboard-btn:hover {
+  transform: translateY(-3px);
+}
+
+/* ===================================================
+   THEME TOGGLE BUTTON
+=================================================== */
+.theme-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px var(--card-shadow);
+  z-index: 1001;
+}
+
+/* ===================================================
    MOBILE RESPONSIVENESS
 =================================================== */
 @media (max-width: 768px) {
   nav { flex-direction: column; gap: 10px; padding: 10px; }
   .section { padding: 25px 15px; margin: 25px 0; }
   .card-grid { gap: 15px; }
-  .dashboard-container { width: 100%; padding: 0 10px; }
   .hero-section { padding: 30px 15px; }
+  .gif-wrap { height: 120px; }
+  .card-gif { width: 100px; height: 100px; }
+  .card.hover-gif h3 { font-size: 1rem; }
+  .card.hover-gif p { font-size: 0.9rem; max-width: 180px; }
 }
