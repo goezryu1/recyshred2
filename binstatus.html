@@ -2,89 +2,336 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RecyShred | Bin Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RecyShred | Admin Panel</title>
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* Small admin-specific helpers (keeps your theme) */
+    .pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+    .pill.online { background: rgba(0, 200, 90, 0.18); }
+    .pill.offline { background: rgba(255, 80, 80, 0.18); }
+    .pill.warn { background: rgba(255, 200, 0, 0.18); }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .log {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.7;
+    }
+
+    .muted {
+      opacity: 0.85;
+      font-size: 0.95rem;
+    }
+
+    /* Lock screen */
+    #locked-screen{
+      min-height: 100vh;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      text-align: center;
+    }
+    .locked-card{
+      width: min(560px, 92vw);
+      padding: 26px 20px;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.20);
+      backdrop-filter: blur(8px);
+    }
+    .locked-card code{
+      user-select: all;
+      font-size: 0.95rem;
+    }
+  </style>
 </head>
 <body>
 
+<!-- 🔒 Locked screen (shows if key is missing/wrong) -->
+<div id="locked-screen">
+  <div class="locked-card">
+    <img src="logo.png" class="site-logo" alt="RecyShred Logo" style="margin: 0 auto 10px; display:block;">
+    <h2>Unauthorized Admin Access</h2>
+    <p class="muted">
+      This page is for admins only.
+      <br>Open with:
+    </p>
+    <p><code>binstatus.html#key=MY_ADMIN_KEY</code></p>
+    <p class="muted">If you’re the admin, ask the developer for the key.</p>
+  </div>
+</div>
+
+<!-- ✅ Admin content -->
+<div id="admin-app" style="display:none;">
+
 <header>
-  <img src="logo.png" class="site-logo">
+  <img src="logo.png" class="site-logo" alt="RecyShred Logo">
   <h1>RecyShred</h1>
-  <p>Turn Waste into Worth</p>
+  <p>Admin Control Panel</p>
   <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
 </header>
 
 <nav>
   <a href="index.html">Home</a>
-  <a href="dashboard.html">Dashboard</a>
-  <a href="binstatus.html" class="active">Bin Status</a>
+  <a href="dashboard.html">User Dashboard</a>
+  <a href="binstatus.html" class="active">Admin Panel</a>
 </nav>
 
 <div class="container">
-  <div class="section">
-    <h2>Bin Overview</h2>
-    <div class="card-grid">
-      
-      <!-- Bin 1 -->
-      <div class="bin-status-card">
-        <img src="bin1.png" class="bin-img" alt="Bin 1">
-        <h3>Bin 1 - Plastic Bottles</h3>
 
-        <p class="fullness-text">Fullness: <span class="percent">45</span>%</p>
-
-        <div class="progress-bar">
-          <div class="progress-fill" data-fill="45"></div>
-        </div>
-
-        <p class="status-online">Status: Online</p>
+  <!-- Admin status header -->
+  <section class="section">
+    <div class="row">
+      <div>
+        <h2 style="margin-bottom:6px;">Machine Overview</h2>
+        <p class="muted" id="last-updated">Last updated: --</p>
       </div>
 
-      <!-- Bin 2 -->
-      <div class="bin-status-card">
-        <img src="bin2.png" class="bin-img" alt="Bin 2">
-        <h3>Bin 2 - Tin Cans</h3>
-
-        <p class="fullness-text">Fullness: <span class="percent">87</span>%</p>
-
-        <div class="progress-bar">
-          <div class="progress-fill" data-fill="87"></div>
-        </div>
-
-        <p class="status-alert">Status: Needs emptying</p>
+      <div class="admin-top-actions">
+        <span id="conn-pill" class="pill online">ONLINE</span>
+        <span id="mode-pill" class="pill warn">NORMAL MODE</span>
       </div>
-
     </div>
-  </div>
+  </section>
+
+  <!-- KPI Cards -->
+  <section class="section">
+    <h2>Today’s Summary</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Total Inserts</h3>
+        <p id="kpi-inserts">0</p>
+      </div>
+      <div class="card">
+        <h3>Total Weight</h3>
+        <p id="kpi-weight">0.0 kg</p>
+      </div>
+      <div class="card">
+        <h3>Coins Issued</h3>
+        <p id="kpi-coins">0</p>
+      </div>
+      <div class="card">
+        <h3>Payouts</h3>
+        <p id="kpi-payouts">₱0</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Readings -->
+  <section class="section">
+    <h2>Live Readings</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Bin Level</h3>
+        <p id="bin-level">--%</p>
+        <p class="muted">Status: <span id="bin-status">--</span></p>
+      </div>
+      <div class="card">
+        <h3>Current Weight</h3>
+        <p id="current-weight">-- kg</p>
+        <p class="muted">Sensor: <span id="weight-sensor">OK</span></p>
+      </div>
+      <div class="card">
+        <h3>Machine State</h3>
+        <p id="machine-state">Idle</p>
+        <p class="muted">Door: <span id="door-state">Closed</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alerts & Logs -->
+  <section class="section">
+    <h2>Alerts & Activity</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Active Alerts</h3>
+        <ul class="log" id="alerts-list">
+          <li class="muted">No alerts.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Recent Activity</h3>
+        <ul class="log" id="activity-list">
+          <li class="muted">No activity yet.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls -->
+  <section class="section">
+    <h2>Controls</h2>
+    <div class="card-grid">
+      <button class="bin-btn" id="btn-maintenance">Toggle Maintenance</button>
+      <button class="bin-btn" id="btn-reset">Reset Machine</button>
+      <button class="bin-btn" id="btn-clear-alerts">Clear Alerts</button>
+      <button class="bin-btn" id="btn-lock">Lock / Unlock</button>
+    </div>
+    <p class="muted" style="margin-top:10px;">
+      Note: These buttons are demo actions for now. Later you can connect them to Firebase/ESP32 API.
+    </p>
+  </section>
+
+</div>
 </div>
 
 <script>
-// Animate the progress bars dynamically
-document.querySelectorAll('.progress-fill').forEach(fill => {
-  const value = fill.getAttribute('data-fill');
-  fill.style.width = value + '%';
-});
+/* ✅ ADMIN LOCK (demo only) */
+const ADMIN_KEY = "MY_ADMIN_KEY"; // change this
+const lockedScreen = document.getElementById("locked-screen");
+const adminApp = document.getElementById("admin-app");
 
+function authorized() {
+  return (window.location.hash || "") === "#key=" + ADMIN_KEY;
+}
+
+if (!authorized()) {
+  lockedScreen.style.display = "flex";
+  adminApp.style.display = "none";
+} else {
+  lockedScreen.style.display = "none";
+  adminApp.style.display = "block";
+}
+
+/* ✅ Theme toggle (same as your index) */
 const toggleBtn = document.getElementById("theme-toggle");
-
+if (toggleBtn) {
   toggleBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
-
-    if (document.body.classList.contains("dark-mode")) {
-      toggleBtn.textContent = "☀️ Light Mode";
-      localStorage.setItem("theme", "dark");
-    } else {
-      toggleBtn.textContent = "🌙 Dark Mode";
-      localStorage.setItem("theme", "light");
-    }
+    toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+    localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
   });
 
-  // Load saved theme
   if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark-mode");
     toggleBtn.textContent = "☀️ Light Mode";
   }
+}
+
+/* ✅ Demo data (replace with real data later) */
+const state = {
+  online: true,
+  maintenance: false,
+  locked: false,
+  inserts: 42,
+  weightKg: 18.3,
+  coins: 540,
+  payoutsPHP: 120,
+  binLevel: 65,
+  currentWeight: 0.0,
+  machineState: "Idle",
+  door: "Closed",
+  alerts: [],
+  activity: ["System boot OK", "User redeemed ₱20", "Insert detected: +10 coins"]
+};
+
+function setText(id, value){ const el = document.getElementById(id); if(el) el.textContent = value; }
+
+function render() {
+  const now = new Date();
+  setText("last-updated", "Last updated: " + now.toLocaleString());
+
+  // Pills
+  const conn = document.getElementById("conn-pill");
+  conn.textContent = state.online ? "ONLINE" : "OFFLINE";
+  conn.className = "pill " + (state.online ? "online" : "offline");
+
+  const mode = document.getElementById("mode-pill");
+  mode.textContent = state.maintenance ? "MAINTENANCE MODE" : "NORMAL MODE";
+  mode.className = "pill " + (state.maintenance ? "warn" : "warn");
+
+  // KPIs
+  setText("kpi-inserts", state.inserts);
+  setText("kpi-weight", state.weightKg.toFixed(1) + " kg");
+  setText("kpi-coins", state.coins);
+  setText("kpi-payouts", "₱" + state.payoutsPHP);
+
+  // Live readings
+  setText("bin-level", state.binLevel + "%");
+  setText("bin-status", state.binLevel >= 90 ? "FULL" : state.binLevel >= 70 ? "Near Full" : "OK");
+  setText("current-weight", state.currentWeight.toFixed(1) + " kg");
+  setText("machine-state", state.locked ? "Locked" : state.machineState);
+  setText("door-state", state.door);
+
+  // Alerts
+  const alertsList = document.getElementById("alerts-list");
+  alertsList.innerHTML = "";
+  if (state.alerts.length === 0) {
+    alertsList.innerHTML = "<li class='muted'>No alerts.</li>";
+  } else {
+    state.alerts.forEach(a => {
+      const li = document.createElement("li");
+      li.textContent = a;
+      alertsList.appendChild(li);
+    });
+  }
+
+  // Activity
+  const activityList = document.getElementById("activity-list");
+  activityList.innerHTML = "";
+  if (state.activity.length === 0) {
+    activityList.innerHTML = "<li class='muted'>No activity yet.</li>";
+  } else {
+    state.activity.slice(0, 6).forEach(a => {
+      const li = document.createElement("li");
+      li.textContent = a;
+      activityList.appendChild(li);
+    });
+  }
+}
+
+render();
+
+/* ✅ Controls (demo actions) */
+document.getElementById("btn-maintenance")?.addEventListener("click", () => {
+  state.maintenance = !state.maintenance;
+  state.activity.unshift(state.maintenance ? "Maintenance mode enabled" : "Maintenance mode disabled");
+  render();
+});
+
+document.getElementById("btn-reset")?.addEventListener("click", () => {
+  state.activity.unshift("Machine reset triggered");
+  state.currentWeight = 0.0;
+  state.machineState = "Idle";
+  render();
+});
+
+document.getElementById("btn-clear-alerts")?.addEventListener("click", () => {
+  state.alerts = [];
+  state.activity.unshift("Alerts cleared");
+  render();
+});
+
+document.getElementById("btn-lock")?.addEventListener("click", () => {
+  state.locked = !state.locked;
+  state.activity.unshift(state.locked ? "Machine locked" : "Machine unlocked");
+  render();
+});
 </script>
 
+<script src="script.js"></script>
 </body>
 </html>
