@@ -12,7 +12,7 @@
   <img src="logo.png" class="site-logo">
   <h1>RecyShred</h1>
   <p>Turn Waste into Worth</p>
-  <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
+  <button id="theme-toggle" class="theme-btn">Dark Mode</button>
 </header>
 <nav>
   <a href="index.html">Home</a>
@@ -22,13 +22,11 @@
 
 <div class="dashboard-container">
 
-  <!-- Top Card -->
 <div class="welcome-card">
   <h2>Welcome, Juan Dela Cruz</h2>
   <p>Current Balance: 120 RSC (₱120.00)</p>
 </div>
 
-<!-- Stats Cards -->
 <div class="stats-cards">
 
   <div class="stats-card">
@@ -53,7 +51,6 @@
 
 </div>
 
-<!-- Optional: Progress Bar for Tracking Activity -->
 <div class="progress-section">
   <h3>Activity Progress</h3>
   <div class="progress-bar">
@@ -63,7 +60,6 @@
 </div>
 
 
-  <!-- Simulation Section -->
   <div class="simulate-card">
     <h3>Simulate Recycling</h3>
     <label>Enter Weight (kg):</label>
@@ -74,7 +70,6 @@
 </div>
 
 <script>
-// Animate the progress bars dynamically
 document.querySelectorAll('.progress-fill').forEach(fill => {
   const value = fill.getAttribute('data-fill');
   fill.style.width = value + '%';
@@ -94,10 +89,9 @@ const toggleBtn = document.getElementById("theme-toggle");
     }
   });
 
-  // Load saved theme
   if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark-mode");
-    toggleBtn.textContent = "☀️ Light Mode";
+    toggleBtn.textContent = "Light Mode";
   }
 </script>
 
