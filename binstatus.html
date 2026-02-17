@@ -76,240 +76,277 @@
       This page is for admins only.
       <br>Open with:
     </p>
-    <p><code>#key=MY_ADMIN_KEY</code></p>
+    <p><code id="admin-hint">#key=MY_ADMIN_KEY</code></p>
     <p class="muted">If you’re the admin, ask the developer for the key.</p>
   </div>
 </div>
 
 <div id="admin-app" style="display:none;">
+  <div id="site-content">
 
-<header>
-  <img src="logo.png" class="site-logo" alt="RecyShred Logo">
-  <h1>RecyShred</h1>
-  <p>Admin Control Panel</p>
-  <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
-</header>
+    <header>
+      <img src="logo.png" class="site-logo" alt="RecyShred Logo">
+      <h1>RecyShred</h1>
+      <p>Admin Control Panel</p>
+      <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
+    </header>
 
-<nav>
-  <a href="binstatus.html" class="active">Admin Panel</a>
-</nav>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="binstatus.html" class="active">Admin Panel</a>
+    </nav>
 
-<div class="container">
+    <div class="container">
 
-  <section class="section">
-    <div class="row">
-      <div>
-        <h2 style="margin-bottom:6px;">Machine Overview</h2>
-        <p class="muted" id="last-updated">Last updated: --</p>
-      </div>
+      <section class="section">
+        <div class="row">
+          <div>
+            <h2 style="margin-bottom:6px;">Machine Overview</h2>
+            <p class="muted" id="last-updated">Last updated: --</p>
+          </div>
 
-      <div class="admin-top-actions">
-        <span id="conn-pill" class="pill online">ONLINE</span>
-        <span id="mode-pill" class="pill warn">NORMAL MODE</span>
-      </div>
+          <div class="admin-top-actions">
+            <span id="conn-pill" class="pill online">ONLINE</span>
+            <span id="mode-pill" class="pill warn">NORMAL MODE</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Today’s Summary</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Total Inserts</h3>
+            <p id="kpi-inserts">0</p>
+          </div>
+          <div class="card">
+            <h3>Total Weight</h3>
+            <p id="kpi-weight">0.0 kg</p>
+          </div>
+          <div class="card">
+            <h3>Coins Issued</h3>
+            <p id="kpi-coins">0</p>
+          </div>
+          <div class="card">
+            <h3>Payouts</h3>
+            <p id="kpi-payouts">₱0</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Live Readings</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Bin Level</h3>
+            <p id="bin-level">--%</p>
+            <p class="muted">Status: <span id="bin-status">--</span></p>
+          </div>
+          <div class="card">
+            <h3>Current Weight</h3>
+            <p id="current-weight">-- kg</p>
+            <p class="muted">Sensor: <span id="weight-sensor">OK</span></p>
+          </div>
+          <div class="card">
+            <h3>Machine State</h3>
+            <p id="machine-state">Idle</p>
+            <p class="muted">Door: <span id="door-state">Closed</span></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Alerts & Activity</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Active Alerts</h3>
+            <ul class="log" id="alerts-list">
+              <li class="muted">No alerts.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Recent Activity</h3>
+            <ul class="log" id="activity-list">
+              <li class="muted">No activity yet.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Controls</h2>
+        <div class="card-grid">
+          <button class="bin-btn" id="btn-maintenance">Toggle Maintenance</button>
+          <button class="bin-btn" id="btn-reset">Reset Machine</button>
+          <button class="bin-btn" id="btn-clear-alerts">Clear Alerts</button>
+          <button class="bin-btn" id="btn-lock">Lock / Unlock</button>
+        </div>
+        <p class="muted" style="margin-top:10px;">
+          Note: These buttons are demo actions for now. Later you can connect them to Firebase/ESP32 API.
+        </p>
+      </section>
+
     </div>
-  </section>
-
-  <section class="section">
-    <h2>Today’s Summary</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h3>Total Inserts</h3>
-        <p id="kpi-inserts">0</p>
-      </div>
-      <div class="card">
-        <h3>Total Weight</h3>
-        <p id="kpi-weight">0.0 kg</p>
-      </div>
-      <div class="card">
-        <h3>Coins Issued</h3>
-        <p id="kpi-coins">0</p>
-      </div>
-      <div class="card">
-        <h3>Payouts</h3>
-        <p id="kpi-payouts">₱0</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Live Readings</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h3>Bin Level</h3>
-        <p id="bin-level">--%</p>
-        <p class="muted">Status: <span id="bin-status">--</span></p>
-      </div>
-      <div class="card">
-        <h3>Current Weight</h3>
-        <p id="current-weight">-- kg</p>
-        <p class="muted">Sensor: <span id="weight-sensor">OK</span></p>
-      </div>
-      <div class="card">
-        <h3>Machine State</h3>
-        <p id="machine-state">Idle</p>
-        <p class="muted">Door: <span id="door-state">Closed</span></p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Alerts & Activity</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h3>Active Alerts</h3>
-        <ul class="log" id="alerts-list">
-          <li class="muted">No alerts.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Recent Activity</h3>
-        <ul class="log" id="activity-list">
-          <li class="muted">No activity yet.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Controls</h2>
-    <div class="card-grid">
-      <button class="bin-btn" id="btn-maintenance">Toggle Maintenance</button>
-      <button class="bin-btn" id="btn-reset">Reset Machine</button>
-      <button class="bin-btn" id="btn-clear-alerts">Clear Alerts</button>
-      <button class="bin-btn" id="btn-lock">Lock / Unlock</button>
-    </div>
-    <p class="muted" style="margin-top:10px;">
-      Note: These buttons are demo actions for now. Later you can connect them to Firebase/ESP32 API.
-    </p>
-  </section>
-
-</div>
+  </div>
 </div>
 
 <script>
-const ADMIN_KEY = "PogiAngSoftwareDevNETO"; 
-const lockedScreen = document.getElementById("locked-screen");
-const adminApp = document.getElementById("admin-app");
+  const ADMIN_KEY = "PogiAngSoftwareDevNETO";
+  const lockedScreen = document.getElementById("locked-screen");
+  const adminApp = document.getElementById("admin-app");
+  const adminHint = document.getElementById("admin-hint");
 
-function authorized() {
-  return (window.location.hash || "") === "#key=" + ADMIN_KEY;
-}
+  function authorized() {
+    return (window.location.hash || "") === "#key=" + ADMIN_KEY;
+  }
 
-if (!authorized()) {
-  lockedScreen.style.display = "flex";
-  adminApp.style.display = "none";
-} else {
-  lockedScreen.style.display = "none";
-  adminApp.style.display = "block";
-}
+  if (adminHint) adminHint.textContent = "#key=" + ADMIN_KEY;
 
-const toggleBtn = document.getElementById("theme-toggle");
-if (toggleBtn) {
-  toggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-    toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
-    localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+  if (!authorized()) {
+    lockedScreen.style.display = "flex";
+    adminApp.style.display = "none";
+  } else {
+    lockedScreen.style.display = "none";
+    adminApp.style.display = "block";
+  }
+
+  // ===== Theme Toggle =====
+  const toggleBtn = document.getElementById("theme-toggle");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+      localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+    });
+
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark-mode");
+      toggleBtn.textContent = "☀️ Light Mode";
+    }
+  }
+
+  // ===== Progressive Shrink (NO SNAP) =====
+  (function () {
+    const header = document.querySelector("#site-content header");
+    if (!header) return;
+
+    const setHeaderHeight = () => {
+      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    };
+
+    const update = () => {
+      const max = 260; // slower: takes longer scroll to fully shrink
+      const y = Math.max(0, Math.min(max, window.scrollY || 0));
+      const t = y / max;
+
+      document.documentElement.style.setProperty("--shrink", t.toFixed(3));
+      document.body.classList.toggle("progressive-shrink", t > 0.65);
+
+      requestAnimationFrame(setHeaderHeight);
+    };
+
+    window.addEventListener("load", () => { setHeaderHeight(); update(); });
+    window.addEventListener("resize", () => { setHeaderHeight(); update(); });
+    window.addEventListener("scroll", update, { passive: true });
+  })();
+
+  // ===== Demo data/render =====
+  const state = {
+    online: true,
+    maintenance: false,
+    locked: false,
+    inserts: 42,
+    weightKg: 18.3,
+    coins: 540,
+    payoutsPHP: 120,
+    binLevel: 65,
+    currentWeight: 0.0,
+    machineState: "Idle",
+    door: "Closed",
+    alerts: [],
+    activity: ["System boot OK", "User redeemed ₱20", "Insert detected: +10 coins"]
+  };
+
+  function setText(id, value){
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  }
+
+  function render() {
+    const now = new Date();
+    setText("last-updated", "Last updated: " + now.toLocaleString());
+
+    const conn = document.getElementById("conn-pill");
+    conn.textContent = state.online ? "ONLINE" : "OFFLINE";
+    conn.className = "pill " + (state.online ? "online" : "offline");
+
+    const mode = document.getElementById("mode-pill");
+    mode.textContent = state.maintenance ? "MAINTENANCE MODE" : "NORMAL MODE";
+    mode.className = "pill warn";
+
+    setText("kpi-inserts", state.inserts);
+    setText("kpi-weight", state.weightKg.toFixed(1) + " kg");
+    setText("kpi-coins", state.coins);
+    setText("kpi-payouts", "₱" + state.payoutsPHP);
+
+    setText("bin-level", state.binLevel + "%");
+    setText("bin-status", state.binLevel >= 90 ? "FULL" : state.binLevel >= 70 ? "Near Full" : "OK");
+    setText("current-weight", state.currentWeight.toFixed(1) + " kg");
+    setText("machine-state", state.locked ? "Locked" : state.machineState);
+    setText("door-state", state.door);
+
+    const alertsList = document.getElementById("alerts-list");
+    alertsList.innerHTML = "";
+    if (state.alerts.length === 0) {
+      alertsList.innerHTML = "<li class='muted'>No alerts.</li>";
+    } else {
+      state.alerts.forEach(a => {
+        const li = document.createElement("li");
+        li.textContent = a;
+        alertsList.appendChild(li);
+      });
+    }
+
+    const activityList = document.getElementById("activity-list");
+    activityList.innerHTML = "";
+    if (state.activity.length === 0) {
+      activityList.innerHTML = "<li class='muted'>No activity yet.</li>";
+    } else {
+      state.activity.slice(0, 6).forEach(a => {
+        const li = document.createElement("li");
+        li.textContent = a;
+        activityList.appendChild(li);
+      });
+    }
+  }
+
+  render();
+
+  document.getElementById("btn-maintenance")?.addEventListener("click", () => {
+    state.maintenance = !state.maintenance;
+    state.activity.unshift(state.maintenance ? "Maintenance mode enabled" : "Maintenance mode disabled");
+    render();
   });
 
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark-mode");
-    toggleBtn.textContent = "☀️ Light Mode";
-  }
-}
+  document.getElementById("btn-reset")?.addEventListener("click", () => {
+    state.activity.unshift("Machine reset triggered");
+    state.currentWeight = 0.0;
+    state.machineState = "Idle";
+    render();
+  });
 
-const state = {
-  online: true,
-  maintenance: false,
-  locked: false,
-  inserts: 42,
-  weightKg: 18.3,
-  coins: 540,
-  payoutsPHP: 120,
-  binLevel: 65,
-  currentWeight: 0.0,
-  machineState: "Idle",
-  door: "Closed",
-  alerts: [],
-  activity: ["System boot OK", "User redeemed ₱20", "Insert detected: +10 coins"]
-};
+  document.getElementById("btn-clear-alerts")?.addEventListener("click", () => {
+    state.alerts = [];
+    state.activity.unshift("Alerts cleared");
+    render();
+  });
 
-function setText(id, value){ const el = document.getElementById(id); if(el) el.textContent = value; }
-
-function render() {
-  const now = new Date();
-  setText("last-updated", "Last updated: " + now.toLocaleString());
-
-  const conn = document.getElementById("conn-pill");
-  conn.textContent = state.online ? "ONLINE" : "OFFLINE";
-  conn.className = "pill " + (state.online ? "online" : "offline");
-
-  const mode = document.getElementById("mode-pill");
-  mode.textContent = state.maintenance ? "MAINTENANCE MODE" : "NORMAL MODE";
-  mode.className = "pill " + (state.maintenance ? "warn" : "warn");
-
-  setText("kpi-inserts", state.inserts);
-  setText("kpi-weight", state.weightKg.toFixed(1) + " kg");
-  setText("kpi-coins", state.coins);
-  setText("kpi-payouts", "₱" + state.payoutsPHP);
-
-  setText("bin-level", state.binLevel + "%");
-  setText("bin-status", state.binLevel >= 90 ? "FULL" : state.binLevel >= 70 ? "Near Full" : "OK");
-  setText("current-weight", state.currentWeight.toFixed(1) + " kg");
-  setText("machine-state", state.locked ? "Locked" : state.machineState);
-  setText("door-state", state.door);
-
-  const alertsList = document.getElementById("alerts-list");
-  alertsList.innerHTML = "";
-  if (state.alerts.length === 0) {
-    alertsList.innerHTML = "<li class='muted'>No alerts.</li>";
-  } else {
-    state.alerts.forEach(a => {
-      const li = document.createElement("li");
-      li.textContent = a;
-      alertsList.appendChild(li);
-    });
-  }
-
-  const activityList = document.getElementById("activity-list");
-  activityList.innerHTML = "";
-  if (state.activity.length === 0) {
-    activityList.innerHTML = "<li class='muted'>No activity yet.</li>";
-  } else {
-    state.activity.slice(0, 6).forEach(a => {
-      const li = document.createElement("li");
-      li.textContent = a;
-      activityList.appendChild(li);
-    });
-  }
-}
-
-render();
-
-document.getElementById("btn-maintenance")?.addEventListener("click", () => {
-  state.maintenance = !state.maintenance;
-  state.activity.unshift(state.maintenance ? "Maintenance mode enabled" : "Maintenance mode disabled");
-  render();
-});
-
-document.getElementById("btn-reset")?.addEventListener("click", () => {
-  state.activity.unshift("Machine reset triggered");
-  state.currentWeight = 0.0;
-  state.machineState = "Idle";
-  render();
-});
-
-document.getElementById("btn-clear-alerts")?.addEventListener("click", () => {
-  state.alerts = [];
-  state.activity.unshift("Alerts cleared");
-  render();
-});
-
-document.getElementById("btn-lock")?.addEventListener("click", () => {
-  state.locked = !state.locked;
-  state.activity.unshift(state.locked ? "Machine locked" : "Machine unlocked");
-  render();
-});
+  document.getElementById("btn-lock")?.addEventListener("click", () => {
+    state.locked = !state.locked;
+    state.activity.unshift(state.locked ? "Machine locked" : "Machine unlocked");
+    render();
+  });
 </script>
 
 <script src="script.js"></script>
