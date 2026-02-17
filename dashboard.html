@@ -103,5 +103,46 @@
   }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+<script>
+  const MOBILE_URL = "https://recyshredv3.vercel.app/dashboard.html";
+
+  const ADMIN_TOKEN = "MY_SECURE_ADMIN_TOKEN";
+
+  function isMobile() {
+    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
+
+  function isAdminPC() {
+    return (window.location.hash || "") === "#admin=" + ADMIN_TOKEN;
+  }
+
+  const qrSection = document.getElementById("qr-section");
+  const siteContent = document.getElementById("site-content");
+  const userQR = document.getElementById("userQR");
+  const kioskUrl = document.getElementById("kiosk-url");
+  const adminHint = document.getElementById("admin-hint");
+
+  if (kioskUrl) kioskUrl.textContent = MOBILE_URL;
+  if (adminHint) adminHint.textContent = "#admin=" + ADMIN_TOKEN;
+
+  if (isMobile()) {
+    qrSection.style.display = "none";
+    siteContent.style.display = "block";
+  } else {
+    if (isAdminPC()) {
+      qrSection.style.display = "none";
+      siteContent.style.display = "block";
+    } else {
+      siteContent.style.display = "none";
+      qrSection.style.display = "flex";
+
+      QRCode.toCanvas(userQR, MOBILE_URL, { width: 260 }, function (err) {
+        if (err) console.error(err);
+      });
+    }
+  }
+</script>
 </body>
 </html>
