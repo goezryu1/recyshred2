@@ -149,6 +149,12 @@
       localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
     });
 
+  const headerEl = document.querySelector("#site-content header");
+  window.addEventListener("scroll", () => {
+  if (!headerEl) return;
+    headerEl.classList.toggle("shrink", window.scrollY > 40);
+    });
+
     if (localStorage.getItem("theme") === "dark") {
       document.body.classList.add("dark-mode");
       toggleBtn.textContent = "☀️ Light Mode";
