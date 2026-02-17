@@ -149,23 +149,34 @@
       localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
     });
 
-   (function () {
-    const header = document.querySelector("#site-content header");
-    if (!header) return;
+    (function () {
+      const header = document.querySelector("#site-content header");
+      if (!header) return;
 
-    const setHeaderHeight = () => {
-      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
-    };
+      const setHeaderHeight = () => {
+        document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+      };
 
-    const onScroll = () => {
-      document.body.classList.toggle("shrink-ui", window.scrollY > 40);
-      requestAnimationFrame(setHeaderHeight);
-    };
+      // 🔥 Adjust these to your liking
+      const SHRINK_AT = 160;      // start shrinking after this scroll
+      const EXPAND_AT = 110;      // expand back before this scroll (prevents flicker)
 
-    window.addEventListener("load", () => { setHeaderHeight(); onScroll(); });
-    window.addEventListener("resize", setHeaderHeight);
-    window.addEventListener("scroll", onScroll, { passive: true });
-  })();
+      const onScroll = () => {
+        const y = window.scrollY || 0;
+
+        if (!document.body.classList.contains("shrink-ui") && y > SHRINK_AT) {
+          document.body.classList.add("shrink-ui");
+        } else if (document.body.classList.contains("shrink-ui") && y < EXPAND_AT) {
+          document.body.classList.remove("shrink-ui");
+        }
+
+        requestAnimationFrame(setHeaderHeight);
+      };
+
+      window.addEventListener("load", () => { setHeaderHeight(); onScroll(); });
+      window.addEventListener("resize", () => { setHeaderHeight(); onScroll(); });
+      window.addEventListener("scroll", onScroll, { passive: true });
+    })();
 
     if (localStorage.getItem("theme") === "dark") {
       document.body.classList.add("dark-mode");
@@ -178,7 +189,6 @@
 
 <script>
   const MOBILE_URL = "https://recyshredv3.vercel.app/index.html";
-
   const ADMIN_TOKEN = "MY_SECURE_ADMIN_TOKEN";
 
   function isMobile() {
@@ -215,6 +225,7 @@
     }
   }
 </script>
+
 
 <script src="script.js"></script>
 </body>
