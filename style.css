@@ -605,6 +605,59 @@ body.shrink-ui nav a {
   font-size: 0.95rem;
 }
 
+/* =========================================
+   PROGRESSIVE SHRINK 
+========================================= */
+
+:root { --shrink: 0; }
+
+#site-content header,
+nav {
+  will-change: padding, background, box-shadow, transform;
+}
+
+#site-content header {
+  padding: calc(25px - (13px * var(--shrink))) 20px;
+}
+
+#site-content header .site-logo {
+  width: calc(160px - (104px * var(--shrink))); 
+  margin: 0 auto calc(10px - (10px * var(--shrink)));
+  animation: logoFloatSoft 5.5s ease-in-out infinite;
+}
+
+body.progressive-shrink #site-content header .site-logo {
+  animation-play-state: paused;
+}
+
+#site-content header h1 {
+  font-size: calc(2rem - (0.85rem * var(--shrink)));
+}
+
+#site-content header p {
+  opacity: calc(0.92 - (0.92 * var(--shrink)));
+  transform: translateY(calc(0px + (6px * var(--shrink))));
+  max-height: calc(40px - (40px * var(--shrink)));
+  overflow: hidden;
+}
+
+#site-content header {
+  background: color-mix(in srgb, var(--header-bg) calc(100% - (20% * var(--shrink))), var(--body-bg) calc(20% * var(--shrink)));
+  backdrop-filter: blur(calc(10px + (8px * var(--shrink))));
+  -webkit-backdrop-filter: blur(calc(10px + (8px * var(--shrink))));
+  box-shadow: 0 calc(5px + (7px * var(--shrink))) calc(15px + (10px * var(--shrink))) rgba(0,0,0,0.08);
+}
+
+nav {
+  padding: calc(12px - (4px * var(--shrink))) 20px;
+  gap: calc(15px - (7px * var(--shrink)));
+}
+
+nav a {
+  padding: calc(9px - (2px * var(--shrink))) calc(18px - (6px * var(--shrink)));
+  font-size: calc(1rem - (0.05rem * var(--shrink)));
+}
+
 /* ===================================================
    MOBILE RESPONSIVENESS
 =================================================== */

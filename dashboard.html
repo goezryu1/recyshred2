@@ -92,51 +92,30 @@
       );
     });
 
-    /* ===============================
-       SLOW COMPACT APP BAR SHRINK
-    =============================== */
     (function () {
-      const header = document.querySelector("#site-content header");
-      if (!header) return;
+    const header = document.querySelector("#site-content header");
+    if (!header) return;
 
-      const setHeaderHeight = () => {
-        document.documentElement.style.setProperty(
-          "--header-h",
-          header.offsetHeight + "px"
-        );
-      };
+    const setHeaderHeight = () => {
+      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    };
 
-      // 🔥 Adjust here if you want slower/faster trigger
-      const SHRINK_AT = 160;   // scroll before shrinking
-      const EXPAND_AT = 110;   // scroll before expanding back
+    const update = () => {
+      // 0..1 based on scroll from 0 to 220px
+      const max = 220;
+      const y = Math.max(0, Math.min(max, window.scrollY || 0));
+      const t = y / max;
 
-      const onScroll = () => {
-        const y = window.scrollY || 0;
+      document.documentElement.style.setProperty("--shrink", t.toFixed(3));
+      document.body.classList.toggle("progressive-shrink", t > 0.65);
 
-        if (!document.body.classList.contains("shrink-ui") && y > SHRINK_AT) {
-          document.body.classList.add("shrink-ui");
-        } else if (
-          document.body.classList.contains("shrink-ui") &&
-          y < EXPAND_AT
-        ) {
-          document.body.classList.remove("shrink-ui");
-        }
+      requestAnimationFrame(setHeaderHeight);
+    };
 
-        requestAnimationFrame(setHeaderHeight);
-      };
-
-      window.addEventListener("load", () => {
-        setHeaderHeight();
-        onScroll();
-      });
-
-      window.addEventListener("resize", () => {
-        setHeaderHeight();
-        onScroll();
-      });
-
-      window.addEventListener("scroll", onScroll, { passive: true });
-    })();
+    window.addEventListener("load", () => { setHeaderHeight(); update(); });
+    window.addEventListener("resize", () => { setHeaderHeight(); update(); });
+    window.addEventListener("scroll", update, { passive: true });
+  })();
 
     if (localStorage.getItem("theme") === "dark") {
       document.body.classList.add("dark-mode");
