@@ -72,7 +72,7 @@
 
     <p class="kiosk-hint">
       Admin PC access:
-      <br><code>#key=MY_ADMIN_KEY</code>
+      <br><code id="admin-hint"></code>
     </p>
     <p class="kiosk-hint">If you’re the admin, ask the developer for the key.</p>
   </div>
@@ -155,6 +155,7 @@
     }
   }
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
 <script>
@@ -174,11 +175,14 @@
   const siteContent = document.getElementById("site-content");
   const userQR = document.getElementById("userQR");
   const kioskUrl = document.getElementById("kiosk-url");
+  const adminHint = document.getElementById("admin-hint");
 
   if (kioskUrl) kioskUrl.textContent = MOBILE_URL;
+  if (adminHint) adminHint.textContent = "#admin=" + ADMIN_TOKEN;
 
   if (isMobile()) {
-    window.location.replace(MOBILE_URL);
+    qrSection.style.display = "none";
+    siteContent.style.display = "block";
   } else {
     if (isAdminPC()) {
       qrSection.style.display = "none";
