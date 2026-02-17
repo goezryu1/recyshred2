@@ -1,196 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RecyShred | Admin Panel</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <style>
-    .pill {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      opacity: 0.95;
-    }
-    .pill.online { background: rgba(0, 200, 90, 0.18); }
-    .pill.offline { background: rgba(255, 80, 80, 0.18); }
-    .pill.warn { background: rgba(255, 200, 0, 0.18); }
-
-    .row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .admin-top-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .log {
-      margin: 0;
-      padding-left: 18px;
-      line-height: 1.7;
-    }
-
-    .muted {
-      opacity: 0.85;
-      font-size: 0.95rem;
-    }
-
-    #locked-screen{
-      min-height: 100vh;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-      text-align: center;
-    }
-    .locked-card{
-      width: min(560px, 92vw);
-      padding: 26px 20px;
-      border-radius: 18px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
-      background: rgba(0,0,0,0.20);
-      backdrop-filter: blur(8px);
-    }
-    .locked-card code{
-      user-select: all;
-      font-size: 0.95rem;
-    }
-  </style>
-</head>
-<body>
-
-<div id="locked-screen">
-  <div class="locked-card">
-    <img src="logo.png" class="site-logo" alt="RecyShred Logo" style="margin: 0 auto 10px; display:block;">
-    <h2>Unauthorized Admin Access</h2>
-    <p class="muted">
-      This page is for admins only.
-      <br>Open with:
-    </p>
-    <p><code id="admin-hint">#key=MY_ADMIN_KEY</code></p>
-    <p class="muted">If you’re the admin, ask the developer for the key.</p>
-  </div>
-</div>
-
-<div id="admin-app" style="display:none;">
-  <div id="site-content">
-
-    <header>
-      <img src="logo.png" class="site-logo" alt="RecyShred Logo">
-      <h1>RecyShred</h1>
-      <p>Admin Control Panel</p>
-      <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
-    </header>
-
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="binstatus.html" class="active">Admin Panel</a>
-    </nav>
-
-    <div class="container">
-
-      <section class="section">
-        <div class="row">
-          <div>
-            <h2 style="margin-bottom:6px;">Machine Overview</h2>
-            <p class="muted" id="last-updated">Last updated: --</p>
-          </div>
-
-          <div class="admin-top-actions">
-            <span id="conn-pill" class="pill online">ONLINE</span>
-            <span id="mode-pill" class="pill warn">NORMAL MODE</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Today’s Summary</h2>
-        <div class="card-grid">
-          <div class="card">
-            <h3>Total Inserts</h3>
-            <p id="kpi-inserts">0</p>
-          </div>
-          <div class="card">
-            <h3>Total Weight</h3>
-            <p id="kpi-weight">0.0 kg</p>
-          </div>
-          <div class="card">
-            <h3>Coins Issued</h3>
-            <p id="kpi-coins">0</p>
-          </div>
-          <div class="card">
-            <h3>Payouts</h3>
-            <p id="kpi-payouts">₱0</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Live Readings</h2>
-        <div class="card-grid">
-          <div class="card">
-            <h3>Bin Level</h3>
-            <p id="bin-level">--%</p>
-            <p class="muted">Status: <span id="bin-status">--</span></p>
-          </div>
-          <div class="card">
-            <h3>Current Weight</h3>
-            <p id="current-weight">-- kg</p>
-            <p class="muted">Sensor: <span id="weight-sensor">OK</span></p>
-          </div>
-          <div class="card">
-            <h3>Machine State</h3>
-            <p id="machine-state">Idle</p>
-            <p class="muted">Door: <span id="door-state">Closed</span></p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Alerts & Activity</h2>
-        <div class="card-grid">
-          <div class="card">
-            <h3>Active Alerts</h3>
-            <ul class="log" id="alerts-list">
-              <li class="muted">No alerts.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3>Recent Activity</h3>
-            <ul class="log" id="activity-list">
-              <li class="muted">No activity yet.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Controls</h2>
-        <div class="card-grid">
-          <button class="bin-btn" id="btn-maintenance">Toggle Maintenance</button>
-          <button class="bin-btn" id="btn-reset">Reset Machine</button>
-          <button class="bin-btn" id="btn-clear-alerts">Clear Alerts</button>
-          <button class="bin-btn" id="btn-lock">Lock / Unlock</button>
-        </div>
-        <p class="muted" style="margin-top:10px;">
-          Note: These buttons are demo actions for now. Later you can connect them to Firebase/ESP32 API.
-        </p>
-      </section>
-
-    </div>
-  </div>
-</div>
-
 <script>
   const ADMIN_KEY = "PogiAngSoftwareDevNETO";
   const lockedScreen = document.getElementById("locked-screen");
@@ -201,17 +8,25 @@
     return (window.location.hash || "") === "#key=" + ADMIN_KEY;
   }
 
-  if (adminHint) adminHint.textContent = "#key=" + ADMIN_KEY;
-
-  if (!authorized()) {
-    lockedScreen.style.display = "flex";
-    adminApp.style.display = "none";
-  } else {
-    lockedScreen.style.display = "none";
-    adminApp.style.display = "block";
+  function isMobile() {
+    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   }
 
-  // ===== Theme Toggle =====
+  if (isMobile()) {
+    window.location.replace("index.html");
+  } else {
+
+    if (!authorized()) {
+      lockedScreen.style.display = "flex";
+      adminApp.style.display = "none";
+
+      if (adminHint) adminHint.textContent = "Admin access link required.";
+    } else {
+      lockedScreen.style.display = "none";
+      adminApp.style.display = "block";
+    }
+  }
+
   const toggleBtn = document.getElementById("theme-toggle");
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
@@ -226,7 +41,6 @@
     }
   }
 
-  // ===== Progressive Shrink (NO SNAP) =====
   (function () {
     const header = document.querySelector("#site-content header");
     if (!header) return;
@@ -236,7 +50,7 @@
     };
 
     const update = () => {
-      const max = 260; // slower: takes longer scroll to fully shrink
+      const max = 260; 
       const y = Math.max(0, Math.min(max, window.scrollY || 0));
       const t = y / max;
 
@@ -251,7 +65,6 @@
     window.addEventListener("scroll", update, { passive: true });
   })();
 
-  // ===== Demo data/render =====
   const state = {
     online: true,
     maintenance: false,
@@ -348,7 +161,3 @@
     render();
   });
 </script>
-
-<script src="script.js"></script>
-</body>
-</html>
