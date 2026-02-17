@@ -91,125 +91,70 @@ a {
 }
 
 /* ===================================================
-   HEADER
+   HEADER (CLEAN MODERN SHRINK)
 =================================================== */
 
-/* Header load-in */
+/* One-time entrance (clean) */
 #site-content header {
-  position: sticky; 
+  position: sticky;
   top: 0;
-  animation: headerIn 650ms cubic-bezier(.2,.9,.2,1) both;
+  z-index: 1000;
+  animation: headerIntro 420ms ease-out both;
+  transition: padding 240ms ease, box-shadow 240ms ease, background 240ms ease, border-color 240ms ease;
 }
 
-@keyframes headerIn {
-  from { opacity: 0; transform: translateY(-14px); }
+@keyframes headerIntro {
+  from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-#site-content header::after {
-  content: "";
-  display: block;
-  height: 2px;
-  width: 100%;
-  margin-top: 14px;
-  background: linear-gradient(90deg, transparent, var(--neon), transparent);
-  opacity: 0.55;
-  filter: blur(0.1px);
-  transform: scaleX(0);
-  transform-origin: center;
-  animation: lineReveal 900ms ease forwards 250ms;
-}
-
-@keyframes lineReveal {
-  to { transform: scaleX(1); }
-}
-
+/* Logo: subtle float only (no glow pulse) */
 #site-content header .site-logo {
-  will-change: transform, filter;
-  animation: logoFloatPro 4s ease-in-out infinite;
-  transition: transform 220ms ease, filter 220ms ease;
-}
-
-@keyframes logoFloatPro {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-5px); }
-}
-
-#site-content header .site-logo:hover {
-  transform: translateY(-5px) rotate(-2deg) scale(1.02);
-  filter: drop-shadow(0 0 14px var(--neon-soft));
-}
-
-#site-content header h1 {
-  animation: titlePulsePro 3.2s ease-in-out infinite;
-}
-
-@keyframes titlePulsePro {
-  0%,100% { text-shadow: 0 0 0 rgba(0,0,0,0); }
-  50%     { text-shadow: 0 0 10px var(--neon-soft); }
-}
-
-#site-content header p {
-  opacity: 0.92;
-  animation: subBreath 3.5s ease-in-out infinite;
-}
-
-@keyframes subBreath {
-  0%,100% { transform: translateY(0); opacity: 0.9; }
-  50%     { transform: translateY(1px); opacity: 1; }
-}
-
-#site-content header.shrink {
-  padding: 14px 20px;         
-  box-shadow: 0 8px 20px rgba(0,0,0,0.10);
-  transition: padding 220ms ease, box-shadow 220ms ease;
-}
-
-#site-content header.shrink .site-logo {
-  width: 110px;             
-  transition: width 220ms ease;
-}
-
-#site-content header.shrink h1 {
-  font-size: 1.55rem;
-  transition: font-size 220ms ease;
-}
-
-header h1,
-header p {
-  animation: headerText 650ms ease both;
-}
-header p { animation-delay: 80ms; }
-
-@keyframes headerText {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.site-logo {
   width: 160px;
   display: block;
   margin: 0 auto 10px;
-  transform-origin: center;
-  will-change: transform, filter;
-  animation: logoPop 700ms cubic-bezier(.2,1.1,.25,1) both,
-             logoFloat 3.8s ease-in-out 750ms infinite,
-             logoPulse 2.8s ease-in-out 750ms infinite;
+  will-change: transform;
+  animation: logoFloatSoft 5.5s ease-in-out infinite;
+  transition: transform 240ms ease, width 240ms ease;
 }
 
-@keyframes logoPop {
-  from { opacity: 0; transform: translateY(-18px) scale(0.88) rotate(-2deg); }
-  to   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+@keyframes logoFloatSoft {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-3px); }
 }
 
-@keyframes logoFloat {
-  0%,100% { transform: translateY(0) scale(1); }
-  50%     { transform: translateY(-7px) scale(1.01); }
+/* Text: tiny entrance only (no looping pulse) */
+#site-content header h1,
+#site-content header p {
+  animation: textIntro 420ms ease-out both;
 }
 
-@keyframes logoPulse {
-  0%,100% { filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
-  50%     { filter: drop-shadow(0 0 14px var(--neon-soft)); }
+#site-content header h1 { animation-delay: 60ms; }
+#site-content header p  { animation-delay: 120ms; opacity: 0.92; }
+
+@keyframes textIntro {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Shrink behavior (triggered by body.shrink-ui via JS) */
+body.shrink-ui #site-content header {
+  padding: 14px 20px; /* smaller header */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+body.shrink-ui #site-content header .site-logo {
+  width: 115px; /* subtle shrink */
+  animation: none; /* stop floating when shrunk for cleaner look */
+  transform: translateY(0);
+}
+
+body.shrink-ui #site-content header h1 {
+  font-size: 1.6rem;
+}
+
+body.shrink-ui #site-content header p {
+  opacity: 0.85;
 }
 
 /* ===================================================
@@ -228,11 +173,21 @@ nav {
   border-bottom: 1px solid var(--header-border);
 
   position: sticky;
-  top: 96px;
+  top: var(--header-h, 96px);
+  transition: padding 240ms ease, box-shadow 240ms ease, background 240ms ease, border-color 240ms ease;
   z-index: 999;
 
   animation: navDrop 650ms cubic-bezier(.2,.9,.2,1) both;
 }
+
+body.shrink-ui nav {
+  padding: 8px 18px;
+  gap: 10px;
+}
+body.shrink-ui nav a {
+  padding: 7px 14px;
+}
+
 
 @keyframes navDrop {
   from { opacity: 0; transform: translateY(-14px); }
