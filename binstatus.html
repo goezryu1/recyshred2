@@ -209,18 +209,15 @@
     return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   }
 
-  // PC-only admin page (mobile users go back to main site)
+  // PC ni migolito admin page 
   if (isMobile()) {
     window.location.replace("index.html");
   } else {
-    // ✅ Do NOT reveal the key on the page
-    // if (adminHint) adminHint.textContent = "#key=" + ADMIN_KEY;
 
     if (!authorized()) {
       lockedScreen.style.display = "flex";
       adminApp.style.display = "none";
 
-      // Optional: show generic hint only (no key)
       if (adminHint) adminHint.textContent = "Admin access link required.";
     } else {
       lockedScreen.style.display = "none";
@@ -228,7 +225,6 @@
     }
   }
 
-  // ===== Theme Toggle =====
   const toggleBtn = document.getElementById("theme-toggle");
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
@@ -243,7 +239,6 @@
     }
   }
 
-  // ===== Progressive Shrink (NO SNAP) =====
   (function () {
     const header = document.querySelector("#site-content header");
     if (!header) return;
@@ -253,7 +248,7 @@
     };
 
     const update = () => {
-      const max = 260; // slower: takes longer scroll to fully shrink
+      const max = 260; 
       const y = Math.max(0, Math.min(max, window.scrollY || 0));
       const t = y / max;
 

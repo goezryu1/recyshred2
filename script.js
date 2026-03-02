@@ -1,17 +1,8 @@
-/* =====================================================
-   USER DATA & CONSTANTS
-===================================================== */
-
 let userCoins = 120;
 let totalWeight = 12; // kg
 
 const COINS_PER_KG = 5;
 const PESO_VALUE = 1; // 1 coin = ₱1
-
-
-/* =====================================================
-   DASHBOARD UPDATE
-===================================================== */
 
 function updateDashboard() {
   const coinsEl = document.getElementById("coins");
@@ -26,11 +17,6 @@ function updateDashboard() {
 }
 
 updateDashboard();
-
-
-/* =====================================================
-   RECYCLING SIMULATION
-===================================================== */
 
 function addRecycle() {
   const input = document.getElementById("newWeight");
@@ -54,10 +40,20 @@ function addRecycle() {
   alert(`You earned ${earnedCoins} coins!`);
 }
 
+import QRCode from 'qrcode';
 
-/* =====================================================
-   REWARDS PAGE LOGIC
-===================================================== */
+const userQR = document.getElementById('userQR');
+QRCode.toCanvas(userQR, 'https://yourwebsite.com', function (error) {
+  if (error) console.error(error);
+  console.log('User QR code generated!');
+});
+
+const adminQR = document.getElementById('adminQR');
+const adminUrl = 'https://yourwebsite.com/admin?token=YOUR_SECURE_TOKEN';
+QRCode.toCanvas(adminQR, adminUrl, function (error) {
+  if (error) console.error(error);
+  console.log('Admin QR code generated!');
+});
 
 document.querySelectorAll(".reward-card").forEach(card => {
   const cost = Number(card.dataset.cost);
@@ -86,11 +82,6 @@ document.querySelectorAll(".reward-card").forEach(card => {
   });
 });
 
-
-/* =====================================================
-   THEME TOGGLE (DARK / LIGHT)
-===================================================== */
-
 const toggleBtn = document.getElementById("theme-toggle");
 
 if (toggleBtn) {
@@ -107,15 +98,10 @@ if (toggleBtn) {
   });
 }
 
-/* Load saved theme */
 if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark-mode");
   if (toggleBtn) toggleBtn.textContent = "☀️ Light Mode";
 }
-
-/* =====================================================
-   HOVER GIF – DEAD ZONE CONTROL (FINAL FIX)
-===================================================== */
 
 document.querySelectorAll('.hover-gif').forEach(card => {
   const gif = card.querySelector('.card-gif');

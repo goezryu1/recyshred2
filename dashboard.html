@@ -24,55 +24,26 @@
   <nav>
     <a href="index.html">Home</a>
     <a href="dashboard.html" class="active">Dashboard</a>
-    <a href="binstatus.html">Bin Status</a>
   </nav>
 
   <div class="dashboard-container">
 
-    <div class="welcome-card">
-      <h2>Welcome, Juan Dela Cruz</h2>
-      <p>Current Balance: 120 RSC (₱120.00)</p>
+    <!-- LOGGED OUT VIEW -->
+    <div class="welcome-card" id="guest-card" style="display:none;">
+      <h2>Welcome, Guest</h2>
+      <p class="muted" style="margin-top:6px;">
+        No account connected yet. Connect an account to track your sessions, and history.
+      </p>
+      <div style="margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <a class="dashboard-btn" href="index.html">Back to Home</a>
+        <a class="dashboard-btn" href="auth.html">Connect Account</a>
+      </div>
     </div>
 
-    <div class="stats-cards">
-
-      <div class="stats-card">
-        <h3>Total Weight Recycled</h3>
-        <p>12 kg</p>
-      </div>
-
-      <div class="stats-card">
-        <h3>Last Activity</h3>
-        <p>June 12, 2025</p>
-      </div>
-
-      <div class="stats-card">
-        <h3>Recycling Sessions</h3>
-        <p>5 Sessions</p>
-      </div>
-
-      <div class="stats-card">
-        <h3>Average Coins per Session</h3>
-        <p>24 RSC</p>
-      </div>
-
-    </div>
-
-    <div class="progress-section">
-      <h3>Activity Progress</h3>
-      <div class="progress-bar">
-        <div class="progress-fill" style="width: 50%;"></div>
-      </div>
-      <p>50% towards daily target</p>
-    </div>
-
-    <div class="simulate-card">
-      <h3>Simulate Recycling</h3>
-      <label>Enter Weight (kg):</label>
-      <input type="number" id="newWeight" placeholder="e.g. 2.5" />
-      <button class="dashboard-btn" onclick="addRecycle()">Shred & Earn</button>
-    </div>
-
+    <!-- LOGGED IN VIEW -->
+    <div class="welcome-card" id="user-card" style="display:none;">
+      <h2 id="user-name">Welcome</h2>
+      <p id="user-balance">Current Balance: --</p>
   </div>
 </div>
 
@@ -93,38 +64,157 @@
     });
 
     (function () {
-    const header = document.querySelector("#site-content header");
-    if (!header) return;
+      const header = document.querySelector("#site-content header");
+      if (!header) return;
 
-    const setHeaderHeight = () => {
-      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
-    };
+      const setHeaderHeight = () => {
+        document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+      };
 
-    const update = () => {
-      // 0..1 based on scroll from 0 to 220px
-      const max = 220;
-      const y = Math.max(0, Math.min(max, window.scrollY || 0));
-      const t = y / max;
+      const update = () => {
+        const max = 220;
+        const y = Math.max(0, Math.min(max, window.scrollY || 0));
+        const t = y / max;
 
-      document.documentElement.style.setProperty("--shrink", t.toFixed(3));
-      document.body.classList.toggle("progressive-shrink", t > 0.65);
+        document.documentElement.style.setProperty("--shrink", t.toFixed(3));
+        document.body.classList.toggle("progressive-shrink", t > 0.65);
 
-      requestAnimationFrame(setHeaderHeight);
-    };
+        requestAnimationFrame(setHeaderHeight);
+      };
 
-    window.addEventListener("load", () => { setHeaderHeight(); update(); });
-    window.addEventListener("resize", () => { setHeaderHeight(); update(); });
-    window.addEventListener("scroll", update, { passive: true });
-  })();
+      window.addEventListener("load", () => { setHeaderHeight(); update(); });
+      window.addEventListener("resize", () => { setHeaderHeight(); update(); });
+      window.addEventListener("scroll", update, { passive: true });
+    })();
 
     if (localStorage.getItem("theme") === "dark") {
       document.body.classList.add("dark-mode");
       toggleBtn.textContent = "☀️ Light Mode";
     }
   }
-
 </script>
 
+<script>
+  // =========================
+  // DASHBOARD: LOGGED OUT / IN UI
+  // =========================
+
+  // Example future structure:
+  // localStorage.setItem("recy_user", JSON.stringify({
+  //   name: "Juan Dela Cruz",
+  //   balanceRSC: 120,
+  //   peso: 120,
+  //   totalWeightKg: 12,
+  //   lastActivity: "June 12, 2025",
+  //   sessions: 5
+  // }))
+
+  const guestCard = document.getElementById("guest-card");
+  const userCard = document.getElementById("user-card");
+
+  const statsWrap = document.getElementById("stats-wrap");
+  const progressWrap = document.getElementById("progress-wrap");
+  const simulateWrap = document.getElementById("simulate-wrap");
+
+  const btnConnect = document.getElementById("btn-connect");
+  const btnSim = document.getElementById("btn-sim");
+
+  function setLoggedOutUI() {
+    guestCard.style.display = "block";
+    userCard.style.display = "none";
+
+    // Keep layout but disable “real” values
+    document.getElementById("stat-weight").textContent = "--";
+    document.getElementById("stat-last").textContent = "--";
+    document.getElementById("stat-sessions").textContent = "--";
+    document.getElementById("stat-avg").textContent = "--";
+    document.getElementById("progress-fill").style.width = "0%";
+    document.getElementById("progress-text").textContent = "Connect an account to see your progress.";
+
+    // Disable simulate
+    document.getElementById("newWeight").disabled = true;
+    btnSim.disabled = true;
+    btnSim.style.opacity = "0.6";
+    document.getElementById("sim-note").textContent = "Simulation is available after connecting an account.";
+  }
+
+  function setLoggedInUI(user) {
+    guestCard.style.display = "none";
+    userCard.style.display = "block";
+
+    const name = user?.name || "User";
+    const balanceRSC = Number(user?.balanceRSC ?? 0);
+    const peso = Number(user?.peso ?? balanceRSC);
+
+    document.getElementById("user-name").textContent = "Welcome, " + name;
+    document.getElementById("user-balance").textContent =
+      "Current Balance: " + balanceRSC + " RSC (₱" + peso.toFixed(2) + ")";
+
+    const totalWeightKg = Number(user?.totalWeightKg ?? 0);
+    const lastActivity = user?.lastActivity || "—";
+    const sessions = Number(user?.sessions ?? 0);
+    const avg = sessions > 0 ? (balanceRSC / sessions) : 0;
+
+    document.getElementById("stat-weight").textContent = totalWeightKg + " kg";
+    document.getElementById("stat-last").textContent = lastActivity;
+    document.getElementById("stat-sessions").textContent = sessions + " Sessions";
+    document.getElementById("stat-avg").textContent = avg.toFixed(0) + " RSC";
+
+    // Example progress (fake daily target of 10kg)
+    const pct = Math.max(0, Math.min(100, (totalWeightKg / 10) * 100));
+    document.getElementById("progress-fill").style.width = pct.toFixed(0) + "%";
+    document.getElementById("progress-text").textContent = pct.toFixed(0) + "% towards daily target";
+
+    // Enable simulate
+    document.getElementById("newWeight").disabled = false;
+    btnSim.disabled = false;
+    btnSim.style.opacity = "1";
+    document.getElementById("sim-note").textContent = "Demo only: this will not save unless you connect Firebase.";
+  }
+
+  // Load user (if any)
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("recy_user") || "null");
+  } catch(e) {
+    user = null;
+  }
+
+  if (!user) setLoggedOutUI();
+  else setLoggedInUI(user);
+
+  // Connect button (demo)
+  btnConnect?.addEventListener("click", () => {
+    // For now, just show an alert. Later you can replace with Firebase login / QR scan login.
+    alert("Connect Account (demo): Add your login system here (Firebase Auth / QR login).");
+  });
+
+  // Simulate button safe handler
+  btnSim?.addEventListener("click", () => {
+    if (!user) return;
+
+    const w = Number(document.getElementById("newWeight").value || 0);
+    if (!w || w <= 0) {
+      alert("Enter a valid weight.");
+      return;
+    }
+
+    // Demo logic: 10 coins per kg
+    const earned = Math.round(w * 10);
+    user.totalWeightKg = Number(user.totalWeightKg || 0) + w;
+    user.balanceRSC = Number(user.balanceRSC || 0) + earned;
+    user.peso = Number(user.peso || 0) + earned;
+
+    user.sessions = Number(user.sessions || 0) + 1;
+    user.lastActivity = new Date().toLocaleDateString();
+
+    localStorage.setItem("recy_user", JSON.stringify(user));
+    setLoggedInUI(user);
+
+    document.getElementById("newWeight").value = "";
+    alert("Demo: You earned " + earned + " RSC!");
+  });
+</script>
 
 </body>
 </html>
