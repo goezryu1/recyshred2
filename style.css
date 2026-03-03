@@ -3,31 +3,44 @@
 =================================================== */
 :root{
   --theme-ease: 320ms ease;
+
+  /* LIGHT MODE */
   --body-bg: #f6faf9;
   --body-gradient:
     radial-gradient(1200px 700px at 20% 0%, rgba(15,159,122,0.08), transparent 60%),
     radial-gradient(900px 650px at 90% 20%, rgba(14,165,164,0.06), transparent 55%);
+
   --text-color: #0f172a;
+
   --header-bg: rgba(241, 245, 249, 0.84);
   --header-border: rgba(15, 23, 42, 0.08);
+
   --nav-link: #0f172a;
   --nav-hover: rgba(15, 159, 122, 0.10);
+
   --section-bg: rgba(255,255,255,0.78);
   --card-bg: rgba(255,255,255,0.72);
   --card-text: #0f172a;
   --card-shadow: rgba(15, 23, 42, 0.10);
+
   --accent: #0f9f7a;
   --accent-soft: rgba(15, 159, 122, 0.12);
+
   --neon: rgba(15, 159, 122, 0.70);
   --neon-soft: rgba(15, 159, 122, 0.22);
+
+  /* Gradient tokens */
   --grad-a: #16a34a;
   --grad-b: #0ea5a4;
   --grad-text: #05201a;
+
+  /* Auth page glows (light) */
   --bg-g1: rgba(15,159,122,0.10);
   --bg-g2: rgba(14,165,164,0.07);
   --bg-g3: rgba(59,130,246,0.05);
 }
 
+/* DARK MODE */
 body.dark-mode{
   --body-bg: #07110f;
   --body-gradient:
@@ -58,9 +71,30 @@ body.dark-mode{
   --grad-b: #14b8a6;
   --grad-text: #04110f;
 
+  /* Auth page glows (dark) */
   --bg-g1: rgba(34,197,94,0.14);
   --bg-g2: rgba(20,184,166,0.10);
   --bg-g3: rgba(127,240,209,0.08);
+}
+
+/* ===================================================
+   HERO SECTION (gradient background)
+=================================================== */
+.hero-section{
+  background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
+  color: var(--grad-text);
+}
+
+.section.hero-section h2.welcome-title{
+  color: #000 !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+}
+
+.section.hero-section h2.welcome-title strong{
+  color: #000 !important;
+  font-weight: 900 !important;
 }
 
 /* ===================================================
