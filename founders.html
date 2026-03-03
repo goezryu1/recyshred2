@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecyShred | Founders</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="site-content">
+
+    <header>
+      <img src="logo.png" class="site-logo" alt="RecyShred Logo" />
+
+      <div class="brand-text">
+        <h1>RecyShred</h1>
+        <p>Turn Waste into Worth</p>
+      </div>
+
+      <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
+    </header>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="founders.html" class="active">Founders</a>
+    </nav>
+
+    <section id="founders" class="section">
+      <h2>Founders</h2>
+      <p class="founders-desc">
+        Meet the team behind RecyShred, working together to build a cleaner future by turning waste into worth.
+      </p>
+
+      <div class="card-grid founders-grid">
+
+<!-- 1 -->
+<div class="card founder-card">
+  <div class="founder-top">
+    <img src="miguel.png" class="founder-avatar-img" alt="Miguel Herrera">
+
+    <div>
+      <h3>Miguel Herrera</h3>
+      <p class="founder-role">
+        Software Developer • UI/UX Designer • Embedded Systems Developer
+      </p>
+    </div>
+  </div>
+
+  <p class="founder-bio">
+    Leads the software development and overall interface design of RecyShred while developing
+    microcontroller-based systems that integrate hardware and software for a seamless user experience.
+  </p>
+
+  <div class="founder-links">
+    <a class="founder-link fb"
+       href="https://www.facebook.com/mgzxlfns/"
+       target="_blank"
+       rel="noopener noreferrer">
+       <span class="fb-icon">f</span>
+       Facebook
+    </a>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="card founder-card">
+  <div class="founder-top">
+    <img src="topher.png" class="founder-avatar-img" alt="Christopher Beldia">
+    <div>
+      <h3>Christopher Beldia</h3>
+      <p class="founder-role">Hardware Engineer • Researcher</p>
+    </div>
+  </div>
+
+  <p class="founder-bio">
+    Develops and integrates machine electronics, sensors, and hardware systems to ensure accurate and stable device performance.
+  </p>
+
+  <div class="founder-links">
+    <a class="founder-link fb"
+       href="https://www.facebook.com/tatsuya.https"
+       target="_blank"
+       rel="noopener noreferrer">
+       <span class="fb-icon">f</span>
+       Facebook
+    </a>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="card founder-card">
+  <div class="founder-top">
+    <img src="kimuel.png" class="founder-avatar-img" alt="Kimuel Tejada">
+    <div>
+      <h3>Kimuel Tejada</h3>
+      <p class="founder-role">Project Lead • Hardware Specialist</p>
+    </div>
+  </div>
+
+  <p class="founder-bio">
+    Leads project planning and coordination while contributing to hardware development and ensuring the team stays aligned with goals and timelines.
+  </p>
+
+  <div class="founder-links">
+    <a class="founder-link fb"
+       href="https://www.facebook.com/kimuelfrancoise.tejada"
+       target="_blank"
+       rel="noopener noreferrer">
+       <span class="fb-icon">f</span>
+       Facebook
+    </a>
+    </a>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="card founder-card">
+  <div class="founder-top">
+    <img src="rjhay.png" class="founder-avatar-img" alt="R Jhay Magpayo">
+    <div>
+      <h3>R Jhay Magpayo</h3>
+      <p class="founder-role">3D Modeler • Research Specialist</p>
+    </div>
+  </div>
+
+  <p class="founder-bio">
+    Focuses on 3D modeling, research, and documentation while supporting testing and deployment preparation for reliable system implementation.
+  </p>
+
+  <div class="founder-links">
+    <a class="founder-link fb"
+       href="https://www.facebook.com/4Jhayyyyyyy"
+       target="_blank"
+       rel="noopener noreferrer">
+       <span class="fb-icon">f</span>
+       Facebook
+    </a>
+  </div>
+</div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const btn = document.getElementById("theme-toggle");
+
+    const saved = localStorage.getItem("recy-theme");
+    if (saved === "dark") {
+      document.body.classList.add("dark-mode");
+      btn.textContent = "☀️ Light Mode";
+    } else {
+      btn.textContent = "🌙 Dark Mode";
+    }
+
+    btn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem("recy-theme", isDark ? "dark" : "light");
+      btn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+    });
+  </script>
+</body>
+</html>
