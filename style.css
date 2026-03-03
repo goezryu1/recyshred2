@@ -85,6 +85,13 @@ body.dark-mode{
   color: var(--grad-text);
 }
 
+.hero-text{
+  color: #ffffff;
+  opacity: 0.95;
+  max-width: 650px;
+  margin: 10px auto 18px;
+}
+
 .section.hero-section h2.welcome-title{
   color: #000 !important;
   font-weight: 900 !important;
