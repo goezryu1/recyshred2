@@ -1,34 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RecyShred | Dashboard</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecyShred | Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <div id="site-content">
 
   <header>
-    <img src="logo.png" class="site-logo" alt="RecyShred Logo">
+    <img src="logo.png" class="site-logo" alt="RecyShred Logo" />
 
     <div class="brand-text">
       <h1>RecyShred</h1>
       <p>Turn Waste into Worth</p>
     </div>
 
-    <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme" type="button">
+      <!-- Sun Icon -->
+      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+
+      <!-- Moon Icon -->
+      <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="founders.html">Founders</a>
+    </nav>
   </header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="dashboard.html" class="active">Dashboard</a>
-    <a href="founders.html">Founders</a>
-  </nav>
-
   <div class="dashboard-container">
-
     <!-- LOGGED OUT VIEW -->
     <div class="welcome-card" id="guest-card" style="display:none;">
       <h2 class="welcome-title">Welcome, Guest</h2>
@@ -45,139 +62,154 @@
     <div class="welcome-card" id="user-card" style="display:none;">
       <h2 id="user-name">Welcome</h2>
       <p id="user-balance">Current Balance: --</p>
+    </div>
+
+    <!-- NOTE:
+      Your script below references IDs like:
+      stat-weight, stat-last, stat-sessions, stat-avg, progress-fill, progress-text,
+      newWeight, btn-sim, sim-note, btn-connect
+      Make sure those elements exist in your HTML (maybe further down in your real file).
+    -->
   </div>
+
 </div>
 
 <script>
-  const toggleBtn = document.getElementById("theme-toggle");
+  // =========================
+  // THEME TOGGLE (SVG ICONS ONLY, NO EMOJI)
+  // =========================
+  const themeBtn = document.getElementById("themeToggle");
 
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-      toggleBtn.textContent =
-        document.body.classList.contains("dark-mode")
-          ? "☀️ Light Mode"
-          : "🌙 Dark Mode";
-      localStorage.setItem(
-        "theme",
-        document.body.classList.contains("dark-mode") ? "dark" : "light"
-      );
-    });
+  function applyTheme(theme) {
+    const isDark = theme === "dark";
+    document.body.classList.toggle("dark-mode", isDark);
+    localStorage.setItem("theme", isDark ? "dark" : "light");
 
-    (function () {
-      const header = document.querySelector("#site-content header");
-      if (!header) return;
-
-      const setHeaderHeight = () => {
-        document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
-      };
-
-      const update = () => {
-        const max = 220;
-        const y = Math.max(0, Math.min(max, window.scrollY || 0));
-        const t = y / max;
-
-        document.documentElement.style.setProperty("--shrink", t.toFixed(3));
-        document.body.classList.toggle("progressive-shrink", t > 0.65);
-
-        requestAnimationFrame(setHeaderHeight);
-      };
-
-      window.addEventListener("load", () => { setHeaderHeight(); update(); });
-      window.addEventListener("resize", () => { setHeaderHeight(); update(); });
-      window.addEventListener("scroll", update, { passive: true });
-    })();
-
-    if (localStorage.getItem("theme") === "dark") {
-      document.body.classList.add("dark-mode");
-      toggleBtn.textContent = "☀️ Light Mode";
-    }
+    // Show only the correct icon
+    const sun = themeBtn?.querySelector(".sun-icon");
+    const moon = themeBtn?.querySelector(".moon-icon");
+    if (sun) sun.style.display = isDark ? "none" : "block";
+    if (moon) moon.style.display = isDark ? "block" : "none";
   }
+
+  // Init theme on load
+  (function initTheme() {
+    const saved = localStorage.getItem("theme");
+    applyTheme(saved === "dark" ? "dark" : "light");
+  })();
+
+  themeBtn?.addEventListener("click", () => {
+    const isDarkNow = document.body.classList.contains("dark-mode");
+    applyTheme(isDarkNow ? "light" : "dark");
+  });
+
+  // =========================
+  // HEADER SHRINK / PROGRESSIVE EFFECT
+  // =========================
+  (function () {
+    const header = document.querySelector("#site-content header");
+    if (!header) return;
+
+    const setHeaderHeight = () => {
+      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    };
+
+    const update = () => {
+      const max = 220;
+      const y = Math.max(0, Math.min(max, window.scrollY || 0));
+      const t = y / max;
+
+      document.documentElement.style.setProperty("--shrink", t.toFixed(3));
+      document.body.classList.toggle("progressive-shrink", t > 0.65);
+
+      requestAnimationFrame(setHeaderHeight);
+    };
+
+    window.addEventListener("load", () => { setHeaderHeight(); update(); });
+    window.addEventListener("resize", () => { setHeaderHeight(); update(); });
+    window.addEventListener("scroll", update, { passive: true });
+  })();
 </script>
 
 <script>
   // =========================
   // DASHBOARD: LOGGED OUT / IN UI
   // =========================
-
-  // Example future structure:
-  // localStorage.setItem("recy_user", JSON.stringify({
-  //   name: "Juan Dela Cruz",
-  //   balanceRSC: 120,
-  //   peso: 120,
-  //   totalWeightKg: 12,
-  //   lastActivity: "June 12, 2025",
-  //   sessions: 5
-  // }))
-
   const guestCard = document.getElementById("guest-card");
-  const userCard = document.getElementById("user-card");
-
-  const statsWrap = document.getElementById("stats-wrap");
-  const progressWrap = document.getElementById("progress-wrap");
-  const simulateWrap = document.getElementById("simulate-wrap");
+  const userCard  = document.getElementById("user-card");
 
   const btnConnect = document.getElementById("btn-connect");
-  const btnSim = document.getElementById("btn-sim");
+  const btnSim     = document.getElementById("btn-sim");
+
+  function safeSetText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
 
   function setLoggedOutUI() {
-    guestCard.style.display = "block";
-    userCard.style.display = "none";
+    if (guestCard) guestCard.style.display = "block";
+    if (userCard) userCard.style.display = "none";
 
-    // Keep layout but disable “real” values
-    document.getElementById("stat-weight").textContent = "--";
-    document.getElementById("stat-last").textContent = "--";
-    document.getElementById("stat-sessions").textContent = "--";
-    document.getElementById("stat-avg").textContent = "--";
-    document.getElementById("progress-fill").style.width = "0%";
-    document.getElementById("progress-text").textContent = "Connect an account to see your progress.";
+    safeSetText("stat-weight", "--");
+    safeSetText("stat-last", "--");
+    safeSetText("stat-sessions", "--");
+    safeSetText("stat-avg", "--");
 
-    // Disable simulate
-    document.getElementById("newWeight").disabled = true;
-    btnSim.disabled = true;
-    btnSim.style.opacity = "0.6";
-    document.getElementById("sim-note").textContent = "Simulation is available after connecting an account.";
+    const fill = document.getElementById("progress-fill");
+    if (fill) fill.style.width = "0%";
+    safeSetText("progress-text", "Connect an account to see your progress.");
+
+    const weightInput = document.getElementById("newWeight");
+    if (weightInput) weightInput.disabled = true;
+
+    if (btnSim) {
+      btnSim.disabled = true;
+      btnSim.style.opacity = "0.6";
+    }
+    safeSetText("sim-note", "Simulation is available after connecting an account.");
   }
 
   function setLoggedInUI(user) {
-    guestCard.style.display = "none";
-    userCard.style.display = "block";
+    if (guestCard) guestCard.style.display = "none";
+    if (userCard) userCard.style.display = "block";
 
     const name = user?.name || "User";
     const balanceRSC = Number(user?.balanceRSC ?? 0);
     const peso = Number(user?.peso ?? balanceRSC);
 
-    document.getElementById("user-name").textContent = "Welcome, " + name;
-    document.getElementById("user-balance").textContent =
-      "Current Balance: " + balanceRSC + " RSC (₱" + peso.toFixed(2) + ")";
+    safeSetText("user-name", "Welcome, " + name);
+    safeSetText("user-balance", "Current Balance: " + balanceRSC + " RSC (₱" + peso.toFixed(2) + ")");
 
     const totalWeightKg = Number(user?.totalWeightKg ?? 0);
-    const lastActivity = user?.lastActivity || "—";
-    const sessions = Number(user?.sessions ?? 0);
-    const avg = sessions > 0 ? (balanceRSC / sessions) : 0;
+    const lastActivity  = user?.lastActivity || "—";
+    const sessions      = Number(user?.sessions ?? 0);
+    const avg           = sessions > 0 ? (balanceRSC / sessions) : 0;
 
-    document.getElementById("stat-weight").textContent = totalWeightKg + " kg";
-    document.getElementById("stat-last").textContent = lastActivity;
-    document.getElementById("stat-sessions").textContent = sessions + " Sessions";
-    document.getElementById("stat-avg").textContent = avg.toFixed(0) + " RSC";
+    safeSetText("stat-weight", totalWeightKg + " kg");
+    safeSetText("stat-last", lastActivity);
+    safeSetText("stat-sessions", sessions + " Sessions");
+    safeSetText("stat-avg", avg.toFixed(0) + " RSC");
 
-    // Example progress (fake daily target of 10kg)
     const pct = Math.max(0, Math.min(100, (totalWeightKg / 10) * 100));
-    document.getElementById("progress-fill").style.width = pct.toFixed(0) + "%";
-    document.getElementById("progress-text").textContent = pct.toFixed(0) + "% towards daily target";
+    const fill = document.getElementById("progress-fill");
+    if (fill) fill.style.width = pct.toFixed(0) + "%";
+    safeSetText("progress-text", pct.toFixed(0) + "% towards daily target");
 
-    // Enable simulate
-    document.getElementById("newWeight").disabled = false;
-    btnSim.disabled = false;
-    btnSim.style.opacity = "1";
-    document.getElementById("sim-note").textContent = "Demo only: this will not save unless you connect Firebase.";
+    const weightInput = document.getElementById("newWeight");
+    if (weightInput) weightInput.disabled = false;
+
+    if (btnSim) {
+      btnSim.disabled = false;
+      btnSim.style.opacity = "1";
+    }
+    safeSetText("sim-note", "Demo only: this will not save unless you connect Firebase.");
   }
 
   // Load user (if any)
   let user = null;
   try {
     user = JSON.parse(localStorage.getItem("recy_user") || "null");
-  } catch(e) {
+  } catch (e) {
     user = null;
   }
 
@@ -186,7 +218,6 @@
 
   // Connect button (demo)
   btnConnect?.addEventListener("click", () => {
-    // For now, just show an alert. Later you can replace with Firebase login / QR scan login.
     alert("Connect Account (demo): Add your login system here (Firebase Auth / QR login).");
   });
 
@@ -194,7 +225,9 @@
   btnSim?.addEventListener("click", () => {
     if (!user) return;
 
-    const w = Number(document.getElementById("newWeight").value || 0);
+    const input = document.getElementById("newWeight");
+    const w = Number(input?.value || 0);
+
     if (!w || w <= 0) {
       alert("Enter a valid weight.");
       return;
@@ -203,16 +236,16 @@
     // Demo logic: 10 coins per kg
     const earned = Math.round(w * 10);
     user.totalWeightKg = Number(user.totalWeightKg || 0) + w;
-    user.balanceRSC = Number(user.balanceRSC || 0) + earned;
-    user.peso = Number(user.peso || 0) + earned;
+    user.balanceRSC    = Number(user.balanceRSC || 0) + earned;
+    user.peso          = Number(user.peso || 0) + earned;
 
-    user.sessions = Number(user.sessions || 0) + 1;
-    user.lastActivity = new Date().toLocaleDateString();
+    user.sessions      = Number(user.sessions || 0) + 1;
+    user.lastActivity  = new Date().toLocaleDateString();
 
     localStorage.setItem("recy_user", JSON.stringify(user));
     setLoggedInUI(user);
 
-    document.getElementById("newWeight").value = "";
+    if (input) input.value = "";
     alert("Demo: You earned " + earned + " RSC!");
   });
 </script>
