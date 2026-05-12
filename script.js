@@ -16,6 +16,15 @@ function updateDashboard() {
   weightEl.innerText = totalWeight.toFixed(1);
 }
 
+async function loadSessions() {
+    const res = await fetch("get_sessions.php");
+    const data = await res.json();
+
+    console.log(data);
+}
+
+loadSessions();
+
 updateDashboard();
 
 function addRecycle() {

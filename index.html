@@ -55,6 +55,38 @@
   .kiosk-hint code{
     user-select: all;
   }
+
+  /* ── Active user banner ── */
+  .active-user-banner {
+    margin-top: 22px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+  .active-user-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin: 0 0 4px;
+  }
+  .active-user-name {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 0;
+    min-height: 1.6em;
+  }
+  .active-user-name.waiting {
+    opacity: 0.4;
+    font-weight: 400;
+    font-size: 1rem;
+  }
+  .active-user-time {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin: 4px 0 0;
+  }
 </style>
 </head>
 
@@ -70,11 +102,18 @@
 
     <p id="kiosk-url" class="kiosk-url"></p>
 
+    <!-- ── Active user display ── -->
+    <div class="active-user-banner">
+      <p class="active-user-label" id="activeUserLabel">Currently logged out</p>
+      <p class="active-user-name waiting" id="activeUserName">Waiting for login…</p>
+      <p class="active-user-time" id="activeUserTime"></p>
+    </div>
+
     <p class="kiosk-hint">
       Admin PC access:
       <br><code id="admin-hint"></code>
     </p>
-    <p class="kiosk-hint">If you’re the admin, ask the developer for the key.</p>
+    <p class="kiosk-hint">If you're the admin, ask the developer for the key.</p>
   </div>
 </div>
 
@@ -85,7 +124,6 @@
     <p>Turn Waste into Worth</p>
 
     <button class="theme-btn" id="themeToggle" aria-label="Toggle theme" type="button">
-      <!-- Sun Icon -->
       <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="12" cy="12" r="5"></circle>
         <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -97,8 +135,6 @@
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
       </svg>
-
-      <!-- Moon Icon -->
       <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
@@ -107,7 +143,7 @@
 
   <nav>
     <a href="index.html" class="active">Home</a>
-    <a href="dashboard.html">Dashboard</a>
+    <a href="dashboard.php">Dashboard</a>
     <a href="founders.html">Founders</a>
   </nav>
 
@@ -119,7 +155,7 @@
         Our smart Recycling Bin rewards users with coins based on the
         weight of recyclable materials.
       </p>
-      <a href="dashboard.html" class="bin-btn">Go to Dashboard</a>
+      <a href="dashboard.php" class="bin-btn">Go to Dashboard</a>
     </section>
 
     <section class="section">
@@ -160,55 +196,43 @@
 </div>
 
 <script>
-  // =========================
-  // THEME TOGGLE (SVG ICONS ONLY)
-  // =========================
+  // ── Theme toggle ──
   const themeBtn = document.getElementById("themeToggle");
 
   function applyTheme(theme) {
     const isDark = theme === "dark";
     document.body.classList.toggle("dark-mode", isDark);
     localStorage.setItem("theme", isDark ? "dark" : "light");
-
-    const sun = themeBtn?.querySelector(".sun-icon");
+    const sun  = themeBtn?.querySelector(".sun-icon");
     const moon = themeBtn?.querySelector(".moon-icon");
-    if (sun) sun.style.display = isDark ? "none" : "block";
+    if (sun)  sun.style.display  = isDark ? "none"  : "block";
     if (moon) moon.style.display = isDark ? "block" : "none";
   }
 
   (function initTheme() {
-    const saved = localStorage.getItem("theme");
-    applyTheme(saved === "dark" ? "dark" : "light");
+    applyTheme(localStorage.getItem("theme") === "dark" ? "dark" : "light");
   })();
 
   themeBtn?.addEventListener("click", () => {
-    const isDarkNow = document.body.classList.contains("dark-mode");
-    applyTheme(isDarkNow ? "light" : "dark");
+    applyTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
   });
 
-  // =========================
-  // HEADER SHRINK / PROGRESSIVE EFFECT
-  // =========================
+  // ── Header shrink ──
   (function () {
     const header = document.querySelector("#site-content header");
     if (!header) return;
-
     const setHeaderHeight = () => {
       document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
     };
-
     const update = () => {
       const max = 220;
       const y = Math.max(0, Math.min(max, window.scrollY || 0));
       const t = y / max;
-
       document.documentElement.style.setProperty("--shrink", t.toFixed(3));
       document.body.classList.toggle("progressive-shrink", t > 0.65);
-
       requestAnimationFrame(setHeaderHeight);
     };
-
-    window.addEventListener("load", () => { setHeaderHeight(); update(); });
+    window.addEventListener("load",   () => { setHeaderHeight(); update(); });
     window.addEventListener("resize", () => { setHeaderHeight(); update(); });
     window.addEventListener("scroll", update, { passive: true });
   })();
@@ -217,8 +241,16 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
 <script>
-  const MOBILE_URL = "https://fabulous-starburst-64d26c.netlify.app";
+  // ── Config ──────────────────────────────────────────────────────────
+  // ▼ The URL your phone will open (your Netlify or local IP)
+  const MOBILE_URL  = "https://fabulous-starburst-64d26c.netlify.app";
+
+  // ▼ Secret token for admin desktop access (keep this private)
   const ADMIN_TOKEN = "MY_SECURE_ADMIN_TOKEN";
+
+  // ▼ Where your recyshred-main PHP files are hosted
+  const API_BASE    = "http://localhost/recyshred-main";
+  // ────────────────────────────────────────────────────────────────────
 
   function isMobile() {
     return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -228,29 +260,66 @@
     return (window.location.hash || "") === "#admin=" + ADMIN_TOKEN;
   }
 
-  const qrSection = document.getElementById("qr-section");
+  const qrSection   = document.getElementById("qr-section");
   const siteContent = document.getElementById("site-content");
-  const userQR = document.getElementById("userQR");
-  const kioskUrl = document.getElementById("kiosk-url");
-  const adminHint = document.getElementById("admin-hint");
+  const userQR      = document.getElementById("userQR");
+  const kioskUrl    = document.getElementById("kiosk-url");
+  const adminHint   = document.getElementById("admin-hint");
 
-  if (kioskUrl) kioskUrl.textContent = MOBILE_URL;
+  if (kioskUrl)  kioskUrl.textContent  = MOBILE_URL;
   if (adminHint) adminHint.textContent = "#admin=" + ADMIN_TOKEN;
 
   if (isMobile()) {
-    qrSection.style.display = "none";
+    // ── Phone: show the normal website ──
+    qrSection.style.display   = "none";
     siteContent.style.display = "block";
   } else {
     if (isAdminPC()) {
-      qrSection.style.display = "none";
+      // ── Admin desktop: show the normal website ──
+      qrSection.style.display   = "none";
       siteContent.style.display = "block";
     } else {
+      // ── Kiosk desktop: show QR screen + active user ──
       siteContent.style.display = "none";
-      qrSection.style.display = "flex";
+      qrSection.style.display   = "flex";
 
-      QRCode.toCanvas(userQR, MOBILE_URL, { width: 260 }, function (err) {
+      QRCode.toCanvas(userQR, MOBILE_URL, { width: 260 }, err => {
         if (err) console.error(err);
       });
+
+      // Poll get_sessions.php every 3 seconds
+      const nameEl  = document.getElementById("activeUserName");
+      const timeEl  = document.getElementById("activeUserTime");
+      const labelEl = document.getElementById("activeUserLabel");
+
+      async function refreshActiveUser() {
+        try {
+          const res  = await fetch(`${API_BASE}/get_sessions.php`);
+          const data = await res.json();
+
+          if (data.ok && data.user) {
+            nameEl.textContent = data.user.name || data.user.email;
+            nameEl.classList.remove("waiting");
+            if (labelEl) labelEl.textContent = "Currently logged in";
+
+            const loggedIn = new Date(data.user.logged_in_at);
+            const mins     = Math.floor((Date.now() - loggedIn) / 60000);
+            timeEl.textContent = mins < 1
+              ? "Just logged in"
+              : `Logged in ${mins} min${mins > 1 ? "s" : ""} ago`;
+          } else {
+            nameEl.textContent = "Waiting for login…";
+            nameEl.classList.add("waiting");
+            if (labelEl) labelEl.textContent = "Currently logged out";
+            timeEl.textContent = "";
+          }
+        } catch {
+          // Server unreachable — fail silently
+        }
+      }
+
+      refreshActiveUser();
+      setInterval(refreshActiveUser, 3000);
     }
   }
 </script>

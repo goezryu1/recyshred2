@@ -186,6 +186,95 @@ body.dark-mode {
 .stagger-3 { animation-delay: calc(var(--enter-delay) * 3); }
 .stagger-4 { animation-delay: calc(var(--enter-delay) * 4); }
 
+/* ===================================================
+   WATER MONITOR DARK THEME OVERRIDES
+   Ensures consistency with admin panel
+=================================================== */
+
+/* Make sure water monitor uses dark theme variables */
+body.dark-mode .water-monitor-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(127, 240, 209, 0.15);
+}
+
+body.dark-mode .admin-tank {
+  border-color: rgba(127, 240, 209, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .water-percentage {
+  color: #f1f5f9;
+}
+
+body.dark-mode .water-volume {
+  color: #94a3b8;
+}
+
+/* Light mode adjustments */
+body:not(.dark-mode) .water-monitor-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(15, 159, 122, 0.2);
+}
+
+body:not(.dark-mode) .admin-tank {
+  border-color: rgba(15, 159, 122, 0.4);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Theme toggle fix - ensure centered icons */
+.theme-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 1001;
+  
+  /* PERFECT CENTERING */
+  display: grid;
+  place-items: center;
+  
+  box-shadow: var(--card-shadow);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.theme-btn .sun-icon,
+.theme-btn .moon-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.25rem;
+  transition: all 0.4s ease;
+}
+
+.theme-btn .sun-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+}
+
+.theme-btn .moon-icon {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-90deg) scale(0.5);
+}
+
+body.dark-mode .theme-btn .sun-icon {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(90deg) scale(0.5);
+}
+
+body.dark-mode .theme-btn .moon-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+}
+
 /* ---------- HEADER - LIQUID GLASS STYLE ---------- */
 #site-content header {
   position: sticky;
@@ -1059,7 +1148,7 @@ body.dark-mode .welcome-card .muted{
 }
 
 /* ===================================================
-   AUTH PAGE - MATCHING YOUR SCREENSHOT
+   AUTH PAGE 
 =================================================== */
 
 .auth-shell {
@@ -1076,7 +1165,6 @@ body.dark-mode .welcome-card .muted{
   overflow: hidden;
 }
 
-/* Animated background orbs */
 .auth-shell::before,
 .auth-shell::after {
   content: "";
@@ -1109,7 +1197,6 @@ body.dark-mode .welcome-card .muted{
   50% { transform: translate(50px, -50px) scale(1.1); }
 }
 
-/* Main auth card - glassmorphism */
 .auth-frame {
   width: min(420px, 92vw);
   padding: 1.5rem;
@@ -1140,13 +1227,12 @@ body.dark-mode .welcome-card .muted{
   }
 }
 
-/* Hero section inside auth card */
 .auth-hero {
   border-radius: 20px;
   padding: 2.5rem 2rem;
   text-align: center;
   background: linear-gradient(135deg, #22c55e 0%, #14b8a6 100%);
-  color: #064e3b; /* DARK green text - high contrast */
+  color: #064e3b; 
   margin-bottom: 1.5rem;
   box-shadow: 
     0 12px 40px rgba(34, 197, 94, 0.3),
@@ -1178,8 +1264,8 @@ body.dark-mode .welcome-card .muted{
   margin-bottom: 0.5rem;
   position: relative;
   z-index: 1;
-  color: #064e3b; /* Dark green - almost black */
-  text-shadow: 0 1px 2px rgba(255,255,255,0.3); /* Subtle lift */
+  color: #064e3b; 
+  text-shadow: 0 1px 2px rgba(255,255,255,0.3); 
 }
 
 .auth-hero p {
@@ -1188,10 +1274,9 @@ body.dark-mode .welcome-card .muted{
   font-weight: 600;
   position: relative;
   z-index: 1;
-  color: #065f46; /* Slightly lighter dark green */
+  color: #065f46; 
 }
 
-/* Alternative: White text with dark overlay for contrast */
 .auth-hero.alt-style {
   color: #ffffff;
 }
@@ -1200,7 +1285,7 @@ body.dark-mode .welcome-card .muted{
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  background: rgba(0, 0, 0, 0.4); 
   z-index: 0;
 }
 
